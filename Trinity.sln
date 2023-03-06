@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trinity.API", "Trinity.API\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Domain", "Trinity.Domain\Trinity.Domain.csproj", "{496712CE-E7B9-44D0-9733-4139167DCD18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Application", "Trinity.Application\Trinity.Application.csproj", "{BA612FE9-16CA-4427-8658-A962E5CD38DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{496712CE-E7B9-44D0-9733-4139167DCD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{496712CE-E7B9-44D0-9733-4139167DCD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{496712CE-E7B9-44D0-9733-4139167DCD18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA612FE9-16CA-4427-8658-A962E5CD38DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA612FE9-16CA-4427-8658-A962E5CD38DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA612FE9-16CA-4427-8658-A962E5CD38DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA612FE9-16CA-4427-8658-A962E5CD38DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
