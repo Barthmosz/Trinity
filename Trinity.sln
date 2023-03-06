@@ -4,9 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33424.131
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Trinity.API", "Trinity.API\Trinity.API.csproj", "{980382FC-D584-436C-809D-C2A41B9979DC}"
-EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Persistence", "Trinity.Persistence\Trinity.Persistence.csproj", "{6E532BC5-07A4-4CC8-9743-B4DF2796B127}"
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Domain", "Trinity.Domain\Trinity.Domain.csproj", "{496712CE-E7B9-44D0-9733-4139167DCD18}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Trinity.Application", "Trinity.Application\Trinity.Application.csproj", "{BA612FE9-16CA-4427-8658-A962E5CD38DA}"
 EndProject
 Global
@@ -19,6 +18,10 @@ Global
 		{980382FC-D584-436C-809D-C2A41B9979DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{980382FC-D584-436C-809D-C2A41B9979DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{980382FC-D584-436C-809D-C2A41B9979DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E532BC5-07A4-4CC8-9743-B4DF2796B127}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E532BC5-07A4-4CC8-9743-B4DF2796B127}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E532BC5-07A4-4CC8-9743-B4DF2796B127}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E532BC5-07A4-4CC8-9743-B4DF2796B127}.Release|Any CPU.Build.0 = Release|Any CPU
 		{496712CE-E7B9-44D0-9733-4139167DCD18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{496712CE-E7B9-44D0-9733-4139167DCD18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{496712CE-E7B9-44D0-9733-4139167DCD18}.Release|Any CPU.ActiveCfg = Release|Any CPU
