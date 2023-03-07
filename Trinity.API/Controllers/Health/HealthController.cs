@@ -7,7 +7,7 @@ namespace Trinity.API.Controllers.Health
   public class HealthController : ControllerBase
   {
     [HttpGet]
-    public IActionResult CheckHealth()
+    public IActionResult CheckHealthAsync()
     {
       return Ok();
     }
