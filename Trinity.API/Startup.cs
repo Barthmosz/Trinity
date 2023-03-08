@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Trinity.Persistence;
+using Trinity.Persistence.ConnectionConfig;
+using Trinity.Persistence.Contexts;
 
 namespace Trinity.API
 {
@@ -20,6 +23,13 @@ namespace Trinity.API
       services.AddControllers();
       services.AddEndpointsApiExplorer();
       services.AddSwaggerGen();
+      services.Configure<DbOptions>(options =>
+      {
+        options.Connection = this.Configuration.GetSection("DatabaseSettings:Connection").Value;
+        options.Name = this.Configuration.GetSection("DatabaseSettings:Name").Value;
+      });
+      services.AddScoped<IConnectionConfig, ConnectionConfig>();
+      services.AddScoped<IMongoDbContext, MongoDbContext>();
     }
 
     public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
