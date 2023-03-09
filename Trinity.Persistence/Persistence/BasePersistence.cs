@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using MongoDB.Driver;
+using System.Threading.Tasks;
 using Trinity.Persistence.Contexts;
 using Trinity.Persistence.Contracts;
 
@@ -12,6 +13,14 @@ namespace Trinity.Persistence.Persistence
     {
       await this.MongoCollection.InsertOneAsync(entity);
       return true;
+    }
+
+    public async Task<bool> Update(D entity)
+    {
+      string id = entity.GetType().GetProperty("Id")?.GetValue(entity)?.ToString() ?? string.Empty;
+      FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
+      ReplaceOneResult result = await this.MongoCollection.ReplaceOneAsync(filter, entity);
+      return result.ModifiedCount > 0;
     }
   }
 }
