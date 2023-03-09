@@ -1,4 +1,5 @@
 ﻿using MongoDB.Driver;
+using SharpCompress.Common;
 using System.Threading.Tasks;
 using Trinity.Persistence.Contexts;
 using Trinity.Persistence.Contracts;
@@ -21,6 +22,13 @@ namespace Trinity.Persistence.Persistence
       FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
       ReplaceOneResult result = await this.MongoCollection.ReplaceOneAsync(filter, entity);
       return result.ModifiedCount > 0;
+    }
+
+    public async Task<bool> Delete(string id)
+    {
+      FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
+      DeleteResult result = await this.MongoCollection.DeleteOneAsync(filter);
+      return result.DeletedCount > 0;
     }
   }
 }

@@ -6,5 +6,6 @@ namespace Trinity.Persistence.Contracts
   {
     Task<bool> Add(D entity);
     Task<bool> Update(D entity);
+    Task<bool> Delete(string id);
   }
 }
