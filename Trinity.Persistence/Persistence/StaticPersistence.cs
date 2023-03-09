@@ -8,6 +8,8 @@ namespace Trinity.Persistence.Persistence
 {
   public class StaticPersistence<D> : IStaticPersistence<D> where D : class
   {
+    private const string IdKey = "_id";
+
     protected IMongoDbContext MongoDbContext;
     protected IMongoCollection<D> MongoCollection;
 
@@ -20,6 +22,12 @@ namespace Trinity.Persistence.Persistence
     public virtual async Task<IEnumerable<D>> GetAllAsync()
     {
       return await this.MongoCollection.Find(Builders<D>.Filter.Empty).ToListAsync();
+    }
+
+    public async Task<D?> GetByIdAsync(string id)
+    {
+      var entity = await this.MongoCollection.FindAsync(Builders<D>.Filter.Eq(IdKey, id));
+      return entity.FirstOrDefault();
     }
   }
 }
