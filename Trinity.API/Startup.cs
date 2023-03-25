@@ -3,9 +3,14 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Trinity.Application.Contracts;
+using Trinity.Application.Services;
+using Trinity.Domain;
 using Trinity.Persistence;
 using Trinity.Persistence.ConnectionConfig;
 using Trinity.Persistence.Contexts;
+using Trinity.Persistence.Contracts;
+using Trinity.Persistence.Persistence;
 
 namespace Trinity.API
 {
@@ -30,6 +35,10 @@ namespace Trinity.API
             });
             services.AddScoped<IConnectionConfig, ConnectionConfig>();
             services.AddScoped<IMongoDbContext, MongoDbContext>();
+
+            services.AddScoped<IStaticPersistence<Products>, StaticPersistence<Products>>();
+
+            services.AddScoped<IProductsService, ProductsService>();
         }
 
         public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
