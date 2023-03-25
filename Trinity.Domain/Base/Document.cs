@@ -1,0 +1,29 @@
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
+
+namespace Trinity.Domain.Base
+{
+    public class Document : IDocument
+    {
+        public Document()
+        {
+            this.Id = Guid.NewGuid().ToString();
+            this.RegistrationDate = DateTime.Now;
+            this.LastModifiedDate = DateTime.Now;
+        }
+
+        [BsonId]
+        [BsonRequired]
+        [BsonRepresentation(BsonType.String)]
+        public string Id { get; private set; }
+
+        [BsonRequired]
+        [BsonElement("")]
+        public DateTime RegistrationDate { get; private set; }
+
+        [BsonRequired]
+        [BsonElement("")]
+        public DateTime LastModifiedDate { get; set; }
+    }
+}

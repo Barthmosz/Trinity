@@ -1,19 +1,20 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Trinity.Domain.Base;
 
 namespace Trinity.Domain
 {
-    public class Products
+    public class Products : Document
     {
-        [BsonElement]
+        [BsonRequired]
         [BsonRepresentation(BsonType.String)]
         public string Name { get; set; } = string.Empty;
 
-        [BsonElement]
+        [BsonRequired]
         [BsonRepresentation(BsonType.Int32)]
         public int Quantity { get; set; }
 
-        [BsonElement]
+        [BsonRequired]
         [BsonRepresentation(BsonType.Decimal128)]
         public decimal Price { get; set; }
     }
