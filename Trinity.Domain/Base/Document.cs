@@ -19,11 +19,11 @@ namespace Trinity.Domain.Base
         public string Id { get; private set; }
 
         [BsonRequired]
-        [BsonElement("")]
+        [BsonRepresentation(BsonType.DateTime)]
         public DateTime RegistrationDate { get; private set; }
 
         [BsonRequired]
-        [BsonElement("")]
+        [BsonRepresentation(BsonType.DateTime)]
         public DateTime LastModifiedDate { get; set; }
     }
 }
