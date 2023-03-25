@@ -2,14 +2,14 @@
 
 namespace Trinity.API.Controllers.Health
 {
-  [ApiController]
-  [Route("api/[Controller]")]
-  public class HealthController : ControllerBase
-  {
-    [HttpGet]
-    public IActionResult CheckHealthAsync()
+    [ApiController]
+    [Route("api/[Controller]")]
+    public class HealthController : ControllerBase
     {
-      return Ok();
+        [HttpGet]
+        public IActionResult CheckHealthAsync()
+        {
+            return Ok();
+        }
     }
-  }
 }

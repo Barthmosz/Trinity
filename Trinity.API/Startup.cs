@@ -9,44 +9,44 @@ using Trinity.Persistence.Contexts;
 
 namespace Trinity.API
 {
-  public class Startup
-  {
-    public IConfiguration Configuration { get; }
-
-    public Startup(IConfiguration configuration)
+    public class Startup
     {
-      this.Configuration = configuration;
-    }
+        public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
-    {
-      services.AddControllers();
-      services.AddEndpointsApiExplorer();
-      services.AddSwaggerGen();
-      services.Configure<DbOptions>(options =>
-      {
-        options.Connection = this.Configuration.GetSection("DatabaseSettings:Connection").Value;
-        options.Name = this.Configuration.GetSection("DatabaseSettings:Name").Value;
-      });
-      services.AddScoped<IConnectionConfig, ConnectionConfig>();
-      services.AddScoped<IMongoDbContext, MongoDbContext>();
-    }
+        public Startup(IConfiguration configuration)
+        {
+            this.Configuration = configuration;
+        }
 
-    public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
-    {
-      if (environment.IsDevelopment())
-      {
-        application.UseSwagger();
-        application.UseSwaggerUI();
-      }
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
+            services.Configure<DbOptions>(options =>
+            {
+                options.Connection = this.Configuration.GetSection("DatabaseSettings:Connection").Value;
+                options.Name = this.Configuration.GetSection("DatabaseSettings:Name").Value;
+            });
+            services.AddScoped<IConnectionConfig, ConnectionConfig>();
+            services.AddScoped<IMongoDbContext, MongoDbContext>();
+        }
 
-      application.UseHttpsRedirection();
-      application.UseRouting();
-      application.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
-      application.UseEndpoints(endpoints =>
-      {
-        endpoints.MapControllers();
-      });
+        public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
+        {
+            if (environment.IsDevelopment())
+            {
+                application.UseSwagger();
+                application.UseSwaggerUI();
+            }
+
+            application.UseHttpsRedirection();
+            application.UseRouting();
+            application.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+            application.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
     }
-  }
 }

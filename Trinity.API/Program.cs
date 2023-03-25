@@ -3,20 +3,20 @@ using Microsoft.Extensions.Hosting;
 
 namespace Trinity.API
 {
-  public class Program
-  {
-    public static void Main(string[] args)
+    public class Program
     {
-      CreateHostBuilder(args).Build().Run();
-    }
-
-    public static IHostBuilder CreateHostBuilder(string[] args)
-    {
-      return Host.CreateDefaultBuilder(args)
-        .ConfigureWebHostDefaults(webBuilder =>
+        public static void Main(string[] args)
         {
-          webBuilder.UseStartup<Startup>();
-        });
+            CreateHostBuilder(args).Build().Run();
+        }
+
+        public static IHostBuilder CreateHostBuilder(string[] args)
+        {
+            return Host.CreateDefaultBuilder(args)
+              .ConfigureWebHostDefaults(webBuilder =>
+              {
+                  webBuilder.UseStartup<Startup>();
+              });
+        }
     }
-  }
 }
