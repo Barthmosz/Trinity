@@ -28,6 +28,6 @@ namespace Trinity.Domain
 
         [BsonRequired]
         [BsonRepresentation(BsonType.Decimal128)]
-        public decimal Discount { get; set; }
+        public decimal Discount { get; set; } = 1;
     }
 }
