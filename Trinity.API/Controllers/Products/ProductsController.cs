@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
@@ -22,7 +23,7 @@ namespace Trinity.API.Controllers.Product
         {
             try
             {
-                var products = await this.productService.GetProductsAsync();
+                IEnumerable<Products> products = await this.productService.GetProductsAsync();
                 return StatusCode((int)HttpStatusCode.OK, new { data = products });
             }
             catch (Exception ex)
@@ -36,7 +37,7 @@ namespace Trinity.API.Controllers.Product
         {
             try
             {
-                var productAdded = await this.productService.AddProductAsync(product);
+                Products productAdded = await this.productService.AddProductAsync(product);
                 return StatusCode((int)HttpStatusCode.Created, new { data = productAdded });
             }
             catch (Exception ex)
