@@ -7,6 +7,6 @@ namespace Trinity.Application.Contracts
     public interface IProductsService
     {
         Task<IEnumerable<Products>> GetProductsAsync();
-        Task<bool> AddProductAsync(Products product);
+        Task<Products> AddProductAsync(Products product);
     }
 }

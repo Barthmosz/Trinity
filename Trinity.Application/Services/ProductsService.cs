@@ -22,9 +22,10 @@ namespace Trinity.Application.Services
             return await this.productStaticPersistence.GetAllAsync();
         }
 
-        public async Task<bool> AddProductAsync(Products product)
+        public async Task<Products> AddProductAsync(Products product)
         {
-            return await this.productsBasePersistence.Add(product);
+            await this.productsBasePersistence.Add(product);
+            return product;
         }
     }
 }
