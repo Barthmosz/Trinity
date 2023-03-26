@@ -37,6 +37,7 @@ namespace Trinity.API
             services.AddScoped<IMongoDbContext, MongoDbContext>();
 
             services.AddScoped<IStaticPersistence<Products>, StaticPersistence<Products>>();
+            services.AddScoped<IBasePersistence<Products>, BasePersistence<Products>>();
 
             services.AddScoped<IProductsService, ProductsService>();
         }
