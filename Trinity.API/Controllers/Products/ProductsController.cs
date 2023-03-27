@@ -60,5 +60,19 @@ namespace Trinity.API.Controllers.Product
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
             }
         }
+
+        [HttpDelete("/v1/products/{id}")]
+        public async Task<IActionResult> DeleteProductAsync(string id)
+        {
+            try
+            {
+                Products? productDeleted = await this.productService.DeleteProductAsync(id);
+                return StatusCode((int)HttpStatusCode.OK, new { data = productDeleted });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+            }
+        }
     }
 }
