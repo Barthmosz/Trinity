@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
+using Trinity.Application.DTOs;
 using Trinity.Domain;
 
 namespace Trinity.API.Controllers.Product
@@ -39,6 +40,20 @@ namespace Trinity.API.Controllers.Product
             {
                 Products productAdded = await this.productService.AddProductAsync(product);
                 return StatusCode((int)HttpStatusCode.Created, new { data = productAdded });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+            }
+        }
+
+        [HttpPut("/v1/products")]
+        public async Task<IActionResult> UpdateProductAsync([FromBody] ProductsDTO product)
+        {
+            try
+            {
+                Products? productUpdate = await this.productService.UpdateProductAsync(product);
+                return StatusCode((int)HttpStatusCode.OK, new { data = productUpdate });
             }
             catch (Exception ex)
             {
