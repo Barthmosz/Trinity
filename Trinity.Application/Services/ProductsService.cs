@@ -48,5 +48,18 @@ namespace Trinity.Application.Services
 
             return productToUpdate;
         }
+
+        public async Task<Products?> DeleteProductAsync(string id)
+        {
+            Products? productToDelete = await this.productStaticPersistence.GetByIdAsync(id);
+
+            if (productToDelete != null)
+            {
+                await this.productsBasePersistence.Delete(id);
+                return productToDelete;
+            }
+
+            return productToDelete;
+        }
     }
 }

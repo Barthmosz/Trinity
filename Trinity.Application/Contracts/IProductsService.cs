@@ -10,5 +10,6 @@ namespace Trinity.Application.Contracts
         Task<IEnumerable<Products>> GetProductsAsync();
         Task<Products> AddProductAsync(Products product);
         Task<Products?> UpdateProductAsync(ProductsDTO product);
+        Task<Products?> DeleteProductAsync(string id);
     }
 }
