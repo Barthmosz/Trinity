@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Trinity.Application.DTOs;
 using Trinity.Domain;
 
 namespace Trinity.Application.Contracts
@@ -8,5 +9,6 @@ namespace Trinity.Application.Contracts
     {
         Task<IEnumerable<Products>> GetProductsAsync();
         Task<Products> AddProductAsync(Products product);
+        Task<Products?> UpdateProductAsync(ProductsDTO product);
     }
 }
