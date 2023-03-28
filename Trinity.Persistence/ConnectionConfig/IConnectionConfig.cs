@@ -2,9 +2,9 @@
 
 namespace Trinity.Persistence.ConnectionConfig
 {
-  public interface IConnectionConfig
-  {
-    IMongoClient MongoClient { get; }
-    IMongoDatabase MongoDatabase { get; }
-  }
+    public interface IConnectionConfig
+    {
+        IMongoClient MongoClient { get; }
+        IMongoDatabase MongoDatabase { get; }
+    }
 }
