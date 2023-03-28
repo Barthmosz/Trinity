@@ -34,11 +34,11 @@ namespace Trinity.API.Controllers.Product
         }
 
         [HttpPost("/v1/products")]
-        public async Task<IActionResult> AddProductAsync([FromBody] Products product)
+        public async Task<IActionResult> AddProductAsync([FromBody] ProductsDTO product)
         {
             try
             {
-                Products productAdded = await this.productService.AddProductAsync(product);
+                ProductsDTO productAdded = await this.productService.AddProductAsync(product);
                 return StatusCode((int)HttpStatusCode.Created, new { data = productAdded });
             }
             catch (Exception ex)

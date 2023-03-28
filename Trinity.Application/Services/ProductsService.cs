@@ -23,9 +23,18 @@ namespace Trinity.Application.Services
             return await this.productStaticPersistence.GetAllAsync();
         }
 
-        public async Task<Products> AddProductAsync(Products product)
+        public async Task<ProductsDTO> AddProductAsync(ProductsDTO product)
         {
-            await this.productsBasePersistence.Add(product);
+            Products productToBeAdded = new()
+            {
+                Price = product.Price,
+                Description = product.Description,
+                Image = product.Image,
+                Name = product.Name,
+                Quantity = product.Quantity
+            };
+
+            await this.productsBasePersistence.Add(productToBeAdded);
             return product;
         }
 
