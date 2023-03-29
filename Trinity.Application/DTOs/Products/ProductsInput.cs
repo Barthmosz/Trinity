@@ -27,5 +27,8 @@ namespace Trinity.Application.DTOs.Products
         [JsonPropertyName("price")]
         [JsonRequired]
         public decimal Price { get; set; }
+
+        [JsonPropertyName("discount")]
+        public decimal Discount { get; set; }
     }
 }

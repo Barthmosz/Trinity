@@ -7,7 +7,7 @@ namespace Trinity.Application.Contracts
 {
     public interface IProductsService
     {
-        Task<IEnumerable<Products>> GetProductsAsync();
+        Task<IEnumerable<ProductsOutput>> GetProductsAsync();
         Task<ProductsOutput> AddProductAsync(ProductsInput product);
         Task<ProductsOutput?> UpdateProductAsync(ProductsInput product, string id);
         Task<ProductsOutput?> DeleteProductAsync(string id);

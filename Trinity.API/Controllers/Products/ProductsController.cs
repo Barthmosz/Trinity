@@ -24,7 +24,7 @@ namespace Trinity.API.Controllers.Product
         {
             try
             {
-                IEnumerable<Products> products = await this.productService.GetProductsAsync();
+                IEnumerable<ProductsOutput> products = await this.productService.GetProductsAsync();
                 return StatusCode((int)HttpStatusCode.OK, new { data = products });
             }
             catch (Exception ex)

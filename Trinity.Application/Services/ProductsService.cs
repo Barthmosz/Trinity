@@ -24,9 +24,11 @@ namespace Trinity.Application.Services
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<Products>> GetProductsAsync()
+        public async Task<IEnumerable<ProductsOutput>> GetProductsAsync()
         {
-            return await this.productStaticPersistence.GetAllAsync();
+            IEnumerable<Products> products = await this.productStaticPersistence.GetAllAsync();
+            IEnumerable<ProductsOutput> productsOutputs = this.mapper.Map<IEnumerable<ProductsOutput>>(products);
+            return productsOutputs;
         }
 
         public async Task<ProductsOutput> AddProductAsync(ProductsInput product)
@@ -44,10 +46,16 @@ namespace Trinity.Application.Services
 
             if (productToUpdate != null)
             {
-                Products product = this.mapper.Map<Products>(productInput);
-                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
+                productToUpdate.Name = productInput.Name;
+                productToUpdate.Description = productInput.Description;
+                productToUpdate.Image = productInput.Image;
+                productToUpdate.Quantity = productInput.Quantity;
+                productToUpdate.Price = productInput.Price;
+                productToUpdate.Discount = productInput.Discount;
 
-                await this.productsBasePersistence.Update(product);
+                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(productToUpdate);
+
+                await this.productsBasePersistence.Update(productToUpdate);
                 return productOutput;
             }
 
