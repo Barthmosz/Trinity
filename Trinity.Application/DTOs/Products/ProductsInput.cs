@@ -1,12 +1,14 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 
-namespace Trinity.Application.DTOs
+namespace Trinity.Application.DTOs.Products
 {
-    public class ProductsDTO
+    public class ProductsInput
     {
-        [JsonPropertyName("id")]
-        public string Id { get; set; } = string.Empty;
-
         [JsonPropertyName("name")]
         [JsonRequired]
         public string Name { get; set; } = string.Empty;
@@ -25,8 +27,5 @@ namespace Trinity.Application.DTOs
         [JsonPropertyName("price")]
         [JsonRequired]
         public decimal Price { get; set; }
-
-        [JsonPropertyName("discount")]
-        public decimal Discount { get; set; }
     }
 }

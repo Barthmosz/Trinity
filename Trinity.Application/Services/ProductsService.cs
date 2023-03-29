@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using AutoMapper;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs;
+using Trinity.Application.DTOs.Products;
 using Trinity.Domain;
 using Trinity.Persistence.Contracts;
 
@@ -11,11 +12,16 @@ namespace Trinity.Application.Services
     {
         private readonly IStaticPersistence<Products> productStaticPersistence;
         private readonly IBasePersistence<Products> productsBasePersistence;
+        private readonly IMapper mapper;
 
-        public ProductsService(IStaticPersistence<Products> productStaticPersistence, IBasePersistence<Products> productsBasePersistence)
+        public ProductsService(
+            IStaticPersistence<Products> productStaticPersistence,
+            IBasePersistence<Products> productsBasePersistence,
+            IMapper mapper)
         {
             this.productStaticPersistence = productStaticPersistence;
             this.productsBasePersistence = productsBasePersistence;
+            this.mapper = mapper;
         }
 
         public async Task<IEnumerable<Products>> GetProductsAsync()
@@ -23,52 +29,44 @@ namespace Trinity.Application.Services
             return await this.productStaticPersistence.GetAllAsync();
         }
 
-        public async Task<ProductsDTO> AddProductAsync(ProductsDTO product)
+        public async Task<ProductsOutput> AddProductAsync(ProductsInput product)
         {
-            Products productToBeAdded = new()
-            {
-                Price = product.Price,
-                Description = product.Description,
-                Image = product.Image,
-                Name = product.Name,
-                Quantity = product.Quantity
-            };
+            Products productToBeAdded = this.mapper.Map<Products>(product);
+            ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(productToBeAdded);
 
             await this.productsBasePersistence.Add(productToBeAdded);
-            return product;
+            return productOutput;
         }
 
-        public async Task<Products?> UpdateProductAsync(ProductsDTO product)
+        public async Task<ProductsOutput?> UpdateProductAsync(ProductsInput productInput, string id)
         {
-            Products? productToUpdate = await this.productStaticPersistence.GetByIdAsync(product.Id);
+            Products? productToUpdate = await this.productStaticPersistence.GetByIdAsync(id);
 
             if (productToUpdate != null)
             {
-                productToUpdate.Image = product.Image;
-                productToUpdate.Name = product.Name;
-                productToUpdate.Description = product.Description;
-                productToUpdate.Discount = product.Discount;
-                productToUpdate.Quantity = product.Quantity;
-                productToUpdate.Price = product.Price;
+                Products product = this.mapper.Map<Products>(productInput);
+                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-                await this.productsBasePersistence.Update(productToUpdate);
-                return productToUpdate;
+                await this.productsBasePersistence.Update(product);
+                return productOutput;
             }
 
-            return productToUpdate;
+            return null;
         }
 
-        public async Task<Products?> DeleteProductAsync(string id)
+        public async Task<ProductsOutput?> DeleteProductAsync(string id)
         {
             Products? productToDelete = await this.productStaticPersistence.GetByIdAsync(id);
 
             if (productToDelete != null)
             {
+                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(productToDelete);
+
                 await this.productsBasePersistence.Delete(id);
-                return productToDelete;
+                return productOutput;
             }
 
-            return productToDelete;
+            return null;
         }
     }
 }
