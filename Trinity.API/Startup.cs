@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Trinity.Application.Contracts;
+using Trinity.Application.Mapping;
 using Trinity.Application.Services;
 using Trinity.Domain;
 using Trinity.Persistence;
@@ -33,6 +34,9 @@ namespace Trinity.API
                 options.Connection = this.Configuration.GetSection("DatabaseSettings:Connection").Value;
                 options.Name = this.Configuration.GetSection("DatabaseSettings:Name").Value;
             });
+
+            services.AddAutoMapper(typeof(DomainToMappingProfile));
+
             services.AddScoped<IConnectionConfig, ConnectionConfig>();
             services.AddScoped<IMongoDbContext, MongoDbContext>();
 

@@ -1,12 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Trinity.Application.DTOs
+namespace Trinity.Application.DTOs.Products
 {
-    public class ProductsDTO
+    public class ProductsInput
     {
-        [JsonPropertyName("id")]
-        public string Id { get; set; } = string.Empty;
-
         [JsonPropertyName("name")]
         [JsonRequired]
         public string Name { get; set; } = string.Empty;
