@@ -42,5 +42,12 @@ namespace Trinity.Test.Persistence
             bool result = await this.basePersistence.Update(this.document);
             Assert.That(result, Is.EqualTo(true));
         }
+
+        [Test]
+        public async Task DeleteOk()
+        {
+            bool result = await this.basePersistence.Delete("any_id");
+            Assert.That(result, Is.EqualTo(true));
+        }
     }
 }
