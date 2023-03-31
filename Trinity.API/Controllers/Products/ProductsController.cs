@@ -48,7 +48,7 @@ namespace Trinity.API.Controllers.Product
         }
 
         [HttpPut("/v1/products/{id}")]
-        public async Task<IActionResult> UpdateProductAsync([FromBody] ProductsInput product, string id)
+        public async Task<IActionResult> UpdateProductAsync([FromBody] ProductsInput product, [FromRoute] string id)
         {
             try
             {
@@ -62,7 +62,7 @@ namespace Trinity.API.Controllers.Product
         }
 
         [HttpDelete("/v1/products/{id}")]
-        public async Task<IActionResult> DeleteProductAsync(string id)
+        public async Task<IActionResult> DeleteProductAsync([FromRoute] string id)
         {
             try
             {
