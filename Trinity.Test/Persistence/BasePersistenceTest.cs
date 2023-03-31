@@ -14,9 +14,9 @@ namespace Trinity.Test.Persistence
     public class BasePersistenceTest
     {
         private IMongoDbContext mongoDbContext;
-        BasePersistence<Document> basePersistence;
-        Document document;
-        List<Document> documents;
+        private BasePersistence<Document> basePersistence;
+        private Document document;
+        private List<Document> documents;
 
         [SetUp]
         public void SetUp()
@@ -33,6 +33,13 @@ namespace Trinity.Test.Persistence
         public async Task AddOk()
         {
             bool result = await this.basePersistence.Add(this.document);
+            Assert.That(result, Is.EqualTo(true));
+        }
+
+        [Test]
+        public async Task UpdateOk()
+        {
+            bool result = await this.basePersistence.Update(this.document);
             Assert.That(result, Is.EqualTo(true));
         }
     }
