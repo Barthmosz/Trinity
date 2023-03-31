@@ -30,6 +30,13 @@ namespace Trinity.Test.Persistence
         }
 
         [Test]
+        public async Task GetAllAsyncOk()
+        {
+            IEnumerable<Document> result = await this.staticPersistence.GetAllAsync();
+            Assert.That(result, Is.EqualTo(this.documents));
+        }
+
+        [Test]
         public async Task GetByIdOk()
         {
             Document? result = await this.staticPersistence.GetByIdAsync("any_id");
