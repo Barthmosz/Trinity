@@ -26,7 +26,7 @@ namespace Trinity.Persistence.Persistence
 
         public async Task<D?> GetByIdAsync(string id)
         {
-            var entity = await this.MongoCollection.FindAsync(Builders<D>.Filter.Eq(IdKey, id));
+            IAsyncCursor<D> entity = await this.MongoCollection.FindAsync(Builders<D>.Filter.Eq(IdKey, id));
             return entity.FirstOrDefault();
         }
     }

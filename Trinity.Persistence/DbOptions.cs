@@ -1,5 +1,8 @@
-﻿namespace Trinity.Persistence
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Trinity.Persistence
 {
+    [ExcludeFromCodeCoverage]
     public class DbOptions
     {
         public string? Connection { get; set; }

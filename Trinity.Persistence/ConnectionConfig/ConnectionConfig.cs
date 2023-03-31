@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Trinity.Persistence.ConnectionConfig
 {
+    [ExcludeFromCodeCoverage]
     public class ConnectionConfig : IConnectionConfig
     {
         public IMongoClient MongoClient { get; }
