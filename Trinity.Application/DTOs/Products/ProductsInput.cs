@@ -20,12 +20,12 @@ namespace Trinity.Application.DTOs.Products
 
         [JsonPropertyName("quantity")]
         [JsonRequired]
-        [Range(1, 999)]
+        [Range(0, 999)]
         public int Quantity { get; set; }
 
         [JsonPropertyName("price")]
         [JsonRequired]
-        [Range(1, 99.999)]
+        [Range(0, 99.999)]
         public decimal Price { get; set; }
 
         [JsonPropertyName("discount")]
