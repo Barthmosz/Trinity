@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Products;
-using Trinity.Domain;
 
 namespace Trinity.API.Controllers.Product
 {
@@ -25,11 +25,11 @@ namespace Trinity.API.Controllers.Product
             try
             {
                 IEnumerable<ProductsOutput> products = await this.productService.GetProductsAsync();
-                return StatusCode((int)HttpStatusCode.OK, new { data = products });
+                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<IEnumerable<ProductsOutput>>(products));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
             }
         }
 
@@ -39,11 +39,11 @@ namespace Trinity.API.Controllers.Product
             try
             {
                 ProductsOutput productAdded = await this.productService.AddProductAsync(product);
-                return StatusCode((int)HttpStatusCode.Created, new { data = productAdded });
+                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<ProductsOutput>(productAdded));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<ProductsOutput>(ex.Message));
             }
         }
 
@@ -53,11 +53,11 @@ namespace Trinity.API.Controllers.Product
             try
             {
                 ProductsOutput? productUpdate = await this.productService.UpdateProductAsync(product, id);
-                return StatusCode((int)HttpStatusCode.OK, new { data = productUpdate });
+                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productUpdate));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<ProductsOutput>(ex.Message));
             }
         }
 
@@ -67,11 +67,11 @@ namespace Trinity.API.Controllers.Product
             try
             {
                 ProductsOutput? productDeleted = await this.productService.DeleteProductAsync(id);
-                return StatusCode((int)HttpStatusCode.OK, new { data = productDeleted });
+                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productDeleted));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = ex.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<ProductsOutput>(ex.Message));
             }
         }
     }
