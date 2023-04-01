@@ -1,5 +1,4 @@
-﻿using DataAnnotationsExtensions;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace Trinity.Application.DTOs.Products
@@ -26,7 +25,7 @@ namespace Trinity.Application.DTOs.Products
 
         [JsonPropertyName("price")]
         [JsonRequired]
-        [Min(1)]
+        [Range(1, 99.999)]
         public decimal Price { get; set; }
 
         [JsonPropertyName("discount")]
