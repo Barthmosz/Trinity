@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Application.DTOs.Products;
-using Trinity.Domain;
 
 namespace Trinity.Application.Contracts
 {

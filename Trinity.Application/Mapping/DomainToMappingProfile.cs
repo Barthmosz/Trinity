@@ -1,4 +1,5 @@
 ﻿using Trinity.Application.DTOs.Products;
+using Trinity.Application.DTOs.Users;
 using Trinity.Domain;
 
 namespace Trinity.Application.Mapping
@@ -8,7 +9,10 @@ namespace Trinity.Application.Mapping
         public DomainToMappingProfile()
         {
             CreateMap<Products, ProductsInput>().ReverseMap();
-            CreateMap<Products, ProductsOutput>().ReverseMap();
+            CreateMap<Products, UsersOutput>().ReverseMap();
+
+            CreateMap<Users, UsersInput>().ReverseMap();
+            CreateMap<Users, UsersOutput>().ReverseMap();
         }
     }
 }
