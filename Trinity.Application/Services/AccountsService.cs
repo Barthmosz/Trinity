@@ -3,6 +3,7 @@ using SecureIdentity.Password;
 using System;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
+using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Users;
 using Trinity.Domain.Accounts;
 using Trinity.Persistence.Contracts;
@@ -39,7 +40,7 @@ namespace Trinity.Application.Services
             return accountOutput;
         }
 
-        public async Task<string> SignInAsync(AccountsInput accountInput)
+        public async Task<TokenOutput> SignInAsync(AccountsInput accountInput)
         {
             Accounts? account = await this.usersStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new Exception("Email not registered.");
 
@@ -48,7 +49,7 @@ namespace Trinity.Application.Services
                 throw new Exception("User or password invalid.");
             }
 
-            string token = this.tokenService.GenerateToken(account);
+            TokenOutput token = this.tokenService.GenerateToken(account);
             return token;
         }
     }

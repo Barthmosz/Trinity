@@ -5,6 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Trinity.Application.Contracts;
+using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.Extensions;
 using Trinity.Domain.Accounts;
 
@@ -12,7 +13,7 @@ namespace Trinity.Application.Services
 {
     public class TokenService : ITokenService
     {
-        public string GenerateToken(Accounts account)
+        public TokenOutput GenerateToken(Accounts account)
         {
             JwtSecurityTokenHandler tokenHandler = new();
             byte[] key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
@@ -24,7 +25,11 @@ namespace Trinity.Application.Services
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token);
+            TokenOutput tokenOutput = new()
+            {
+                Token = tokenHandler.WriteToken(token)
+            };
+            return tokenOutput;
         }
     }
 }

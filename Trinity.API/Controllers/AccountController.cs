@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
+using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Products;
 using Trinity.Application.DTOs.Users;
 
@@ -32,8 +33,8 @@ namespace Trinity.API.Controllers
         {
             try
             {
-                string token = await accountsService.SignInAsync(account);
-                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<string>(token, null));
+                TokenOutput token = await accountsService.SignInAsync(account);
+                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<TokenOutput>(token));
             }
             catch (Exception ex)
             {
