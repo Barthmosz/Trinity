@@ -11,6 +11,9 @@ namespace Trinity.Domain.Accounts
 
         public string PasswordHash { get; set; } = string.Empty;
 
-        public IList<string> Roles { get; set; } = new List<string>();
+        public IList<string> Roles { get; set; } = new List<string>()
+        {
+            "user"
+        };
     }
 }
