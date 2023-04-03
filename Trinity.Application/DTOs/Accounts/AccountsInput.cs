@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Trinity.Application.DTOs.Users
 {
-    public class UsersInput
+    public class AccountsInput
     {
         [JsonPropertyName("name")]
         [JsonRequired]

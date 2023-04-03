@@ -9,7 +9,7 @@ using Trinity.Persistence.Contracts;
 
 namespace Trinity.Application.Services
 {
-    public class AccountsService : IUsersService
+    public class AccountsService : IAccountsService
     {
         private readonly IStaticPersistence<Accounts> usersStaticPersistence;
         private readonly IBasePersistence<Accounts> usersBasePersistence;
@@ -28,27 +28,27 @@ namespace Trinity.Application.Services
             this.mapper = mapper;
         }
 
-        public async Task<UsersOutput> AddUserAsync(UsersInput user)
+        public async Task<AccountsOutput> SignUpAsync(AccountsInput accountInput)
         {
-            Accounts userToBeAdded = this.mapper.Map<Accounts>(user);
-            userToBeAdded.PasswordHash = PasswordHasher.Hash(user.Password);
+            Accounts account = this.mapper.Map<Accounts>(accountInput);
+            account.PasswordHash = PasswordHasher.Hash(accountInput.Password);
 
-            UsersOutput userOutput = this.mapper.Map<UsersOutput>(userToBeAdded);
+            AccountsOutput accountOutput = this.mapper.Map<AccountsOutput>(account);
 
-            await this.usersBasePersistence.Add(userToBeAdded);
-            return userOutput;
+            await this.usersBasePersistence.Add(account);
+            return accountOutput;
         }
 
-        public async Task<string> SignInUserAsync(UsersInput userInput)
+        public async Task<string> SignInAsync(AccountsInput accountInput)
         {
-            Accounts? user = await this.usersStaticPersistence.GetByEmailAsync(userInput.Email) ?? throw new Exception("Email not registered.");
+            Accounts? account = await this.usersStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new Exception("Email not registered.");
 
-            if (!PasswordHasher.Verify(user.PasswordHash, userInput.Password))
+            if (!PasswordHasher.Verify(account.PasswordHash, accountInput.Password))
             {
                 throw new Exception("User or password invalid.");
             }
 
-            string token = this.tokenService.GenerateToken(user);
+            string token = this.tokenService.GenerateToken(account);
             return token;
         }
     }

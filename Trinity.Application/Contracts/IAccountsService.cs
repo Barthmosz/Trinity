@@ -5,7 +5,7 @@ namespace Trinity.Application.Contracts
 {
     public interface IAccountsService
     {
-        Task<UsersOutput> SignUpAccountAsync(UsersInput user);
-        Task<string> SignInAccountAsync(UsersInput user);
+        Task<AccountsOutput> SignUpAsync(AccountsInput user);
+        Task<string> SignInAsync(AccountsInput user);
     }
 }
