@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Trinity.Domain.Base;
 
-namespace Trinity.Domain
+namespace Trinity.Domain.Products
 {
     public class Products : Document
     {
