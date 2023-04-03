@@ -9,7 +9,8 @@ using System.Text;
 using Trinity.Application.Contracts;
 using Trinity.Application.Mapping;
 using Trinity.Application.Services;
-using Trinity.Domain;
+using Trinity.Domain.Accounts;
+using Trinity.Domain.Products;
 using Trinity.Persistence;
 using Trinity.Persistence.ConnectionConfig;
 using Trinity.Persistence.Contexts;
@@ -55,20 +56,21 @@ namespace Trinity.API
                 };
             });
 
-            services.AddTransient<TokenService>();
 
             services.AddAutoMapper(typeof(DomainToMappingProfile));
 
             services.AddScoped<IConnectionConfig, ConnectionConfig>();
             services.AddScoped<IMongoDbContext, MongoDbContext>();
 
+            services.AddScoped<ITokenService, TokenService>();
+
             services.AddScoped<IStaticPersistence<Products>, StaticPersistence<Products>>();
-            services.AddScoped<IStaticPersistence<Users>, StaticPersistence<Users>>();
+            services.AddScoped<IStaticPersistence<Accounts>, StaticPersistence<Accounts>>();
             services.AddScoped<IBasePersistence<Products>, BasePersistence<Products>>();
-            services.AddScoped<IBasePersistence<Users>, BasePersistence<Users>>();
+            services.AddScoped<IBasePersistence<Accounts>, BasePersistence<Accounts>>();
 
             services.AddScoped<IProductsService, ProductsService>();
-            services.AddScoped<IUsersService, UsersService>();
+            services.AddScoped<IAccountsService, AccountsService>();
         }
 
         public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)
