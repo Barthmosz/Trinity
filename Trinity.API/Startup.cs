@@ -39,7 +39,7 @@ namespace Trinity.API
                 options.Name = this.Configuration.GetSection("DatabaseSettings:Name").Value;
             });
 
-            byte[] key = Encoding.ASCII.GetBytes(ConfigurationApp.JwtKey);
+            byte[] key = Encoding.ASCII.GetBytes(this.Configuration.GetSection("JwtKey").Value);
 
             services.AddAuthentication(options =>
             {
