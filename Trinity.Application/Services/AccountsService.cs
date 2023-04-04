@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using SecureIdentity.Password;
-using System;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Users;
+using Trinity.Application.Exceptions.Accounts;
 using Trinity.Domain.Accounts;
 using Trinity.Persistence.Contracts;
 
@@ -42,11 +42,11 @@ namespace Trinity.Application.Services
 
         public async Task<TokenOutput> SignInAsync(AccountsInput accountInput)
         {
-            Accounts? account = await this.usersStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new Exception("Email not registered.");
+            Accounts? account = await this.usersStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new AccountsException("Email not registered.");
 
             if (!PasswordHasher.Verify(account.PasswordHash, accountInput.Password))
             {
-                throw new Exception("User or password invalid.");
+                throw new AccountsException("Invalid email or password.");
             }
 
             TokenOutput token = this.tokenService.GenerateToken(account);

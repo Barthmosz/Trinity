@@ -8,6 +8,7 @@ using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Products;
 using Trinity.Application.DTOs.Users;
+using Trinity.Application.Exceptions.Accounts;
 
 namespace Trinity.API.Controllers
 {
@@ -35,6 +36,10 @@ namespace Trinity.API.Controllers
             {
                 TokenOutput token = await accountsService.SignInAsync(account);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<TokenOutput>(token));
+            }
+            catch (AccountsException ex)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
             }
             catch (Exception ex)
             {
