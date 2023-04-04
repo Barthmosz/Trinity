@@ -31,6 +31,13 @@ namespace Trinity.Application.Services
 
         public async Task<AccountsOutput> SignUpAsync(AccountsSignUpInput accountInput)
         {
+            Accounts? accountExists = await this.usersStaticPersistence.GetByEmailAsync(accountInput.Email);
+
+            if (accountExists != null)
+            {
+                throw new AccountsException("Email already registered.");
+            }
+
             Accounts account = this.mapper.Map<Accounts>(accountInput);
             account.PasswordHash = PasswordHasher.Hash(accountInput.Password);
 

@@ -30,6 +30,10 @@ namespace Trinity.API.Controllers.Accounts
                 AccountsOutput userCreated = await accountsService.SignUpAsync(accountInput);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<AccountsOutput>(userCreated));
             }
+            catch (AccountsException ex)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
+            }
             catch (Exception ex)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
