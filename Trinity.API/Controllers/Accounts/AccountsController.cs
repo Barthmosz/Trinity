@@ -10,10 +10,10 @@ using Trinity.Application.DTOs.Products;
 using Trinity.Application.DTOs.Users;
 using Trinity.Application.Exceptions.Accounts;
 
-namespace Trinity.API.Controllers
+namespace Trinity.API.Controllers.Accounts
 {
     [ApiController]
-    public class AccountController : ControllerBase
+    public class AccountsController : ControllerBase
     {
         [HttpPost("v1/accounts/signup")]
         public async Task<IActionResult> SignUp([FromBody] AccountsInput account, [FromServices] IAccountsService accountsService)
