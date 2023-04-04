@@ -10,6 +10,7 @@ using Trinity.Application.DTOs.Products;
 namespace Trinity.API.Controllers.Product
 {
     [ApiController]
+    [Route("v1/[Controller]")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService productService;
@@ -19,7 +20,7 @@ namespace Trinity.API.Controllers.Product
             this.productService = productService;
         }
 
-        [HttpGet("/v1/products")]
+        [HttpGet]
         public async Task<IActionResult> GetAsync()
         {
             try
@@ -33,7 +34,7 @@ namespace Trinity.API.Controllers.Product
             }
         }
 
-        [HttpPost("/v1/products")]
+        [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] ProductsInput product)
         {
             try
@@ -47,7 +48,7 @@ namespace Trinity.API.Controllers.Product
             }
         }
 
-        [HttpPut("/v1/products/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromBody] ProductsInput product, [FromRoute] string id)
         {
             try
@@ -61,7 +62,7 @@ namespace Trinity.API.Controllers.Product
             }
         }
 
-        [HttpDelete("/v1/products/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string id)
         {
             try

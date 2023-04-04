@@ -13,9 +13,10 @@ using Trinity.Application.Exceptions.Accounts;
 namespace Trinity.API.Controllers.Accounts
 {
     [ApiController]
+    [Route("v1/[Controller]")]
     public class AccountsController : ControllerBase
     {
-        [HttpPost("v1/accounts/signup")]
+        [HttpPost("signup")]
         public async Task<IActionResult> SignUp([FromBody] AccountsInput account, [FromServices] IAccountsService accountsService)
         {
             try
@@ -29,7 +30,7 @@ namespace Trinity.API.Controllers.Accounts
             }
         }
 
-        [HttpPost("v1/accounts/signin")]
+        [HttpPost("signin")]
         public async Task<IActionResult> SignIn([FromBody] AccountsInput account, [FromServices] IAccountsService accountsService)
         {
             try
