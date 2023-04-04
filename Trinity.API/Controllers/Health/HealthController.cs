@@ -3,9 +3,10 @@
 namespace Trinity.API.Controllers.Health
 {
     [ApiController]
+    [Route("v1/[Controller]")]
     public class HealthController : ControllerBase
     {
-        [HttpGet("/v1/health")]
+        [HttpGet]
         public IActionResult CheckHealthAsync()
         {
             return Ok();

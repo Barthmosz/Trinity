@@ -7,5 +7,6 @@ namespace Trinity.Persistence.Contracts
   {
     Task<IEnumerable<D>> GetAllAsync();
     Task<D?> GetByIdAsync(string id);
+        Task<D?> GetByEmailAsync(string email);
   }
 }

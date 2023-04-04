@@ -10,6 +10,7 @@ using Trinity.Application.DTOs.Products;
 namespace Trinity.API.Controllers.Product
 {
     [ApiController]
+    [Route("v1/[Controller]")]
     public class ProductsController : ControllerBase
     {
         private readonly IProductsService productService;
@@ -19,12 +20,12 @@ namespace Trinity.API.Controllers.Product
             this.productService = productService;
         }
 
-        [HttpGet("/v1/products")]
-        public async Task<IActionResult> GetProductsAsync()
+        [HttpGet]
+        public async Task<IActionResult> GetAsync()
         {
             try
             {
-                IEnumerable<ProductsOutput> products = await this.productService.GetProductsAsync();
+                IEnumerable<ProductsOutput> products = await this.productService.GetAsync();
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<IEnumerable<ProductsOutput>>(products));
             }
             catch (Exception ex)
@@ -33,12 +34,12 @@ namespace Trinity.API.Controllers.Product
             }
         }
 
-        [HttpPost("/v1/products")]
-        public async Task<IActionResult> AddProductAsync([FromBody] ProductsInput product)
+        [HttpPost]
+        public async Task<IActionResult> AddAsync([FromBody] ProductsInput product)
         {
             try
             {
-                ProductsOutput productAdded = await this.productService.AddProductAsync(product);
+                ProductsOutput productAdded = await this.productService.AddAsync(product);
                 return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<ProductsOutput>(productAdded));
             }
             catch (Exception ex)
@@ -47,12 +48,12 @@ namespace Trinity.API.Controllers.Product
             }
         }
 
-        [HttpPut("/v1/products/{id}")]
-        public async Task<IActionResult> UpdateProductAsync([FromBody] ProductsInput product, [FromRoute] string id)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAsync([FromBody] ProductsInput product, [FromRoute] string id)
         {
             try
             {
-                ProductsOutput? productUpdate = await this.productService.UpdateProductAsync(product, id);
+                ProductsOutput? productUpdate = await this.productService.UpdateAsync(product, id);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productUpdate));
             }
             catch (Exception ex)
@@ -61,12 +62,12 @@ namespace Trinity.API.Controllers.Product
             }
         }
 
-        [HttpDelete("/v1/products/{id}")]
-        public async Task<IActionResult> DeleteProductAsync([FromRoute] string id)
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync([FromRoute] string id)
         {
             try
             {
-                ProductsOutput? productDeleted = await this.productService.DeleteProductAsync(id);
+                ProductsOutput? productDeleted = await this.productService.DeleteAsync(id);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productDeleted));
             }
             catch (Exception ex)

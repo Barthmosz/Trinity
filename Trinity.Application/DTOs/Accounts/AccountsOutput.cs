@@ -1,6 +1,6 @@
 ﻿namespace Trinity.Application.DTOs.Users
 {
-    public class UsersOutput
+    public class AccountsOutput
     {
         public string Id { get; set; } = string.Empty;
 

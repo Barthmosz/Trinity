@@ -29,5 +29,11 @@ namespace Trinity.Persistence.Persistence
             IAsyncCursor<D> entity = await this.MongoCollection.FindAsync(Builders<D>.Filter.Eq(IdKey, id));
             return entity.FirstOrDefault();
         }
+
+        public async Task<D?> GetByEmailAsync(string email)
+        {
+            IAsyncCursor<D> entity = await this.MongoCollection.FindAsync(Builders<D>.Filter.Eq("Email", email));
+            return entity.FirstOrDefault();
+        }
     }
 }

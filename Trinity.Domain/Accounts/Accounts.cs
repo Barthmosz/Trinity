@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Trinity.Domain.Base;
 
-namespace Trinity.Domain
+namespace Trinity.Domain.Accounts
 {
-    public class Users : Document
+    public class Accounts : Document
     {
         public string Name { get; set; } = string.Empty;
 
@@ -11,6 +11,9 @@ namespace Trinity.Domain
 
         public string PasswordHash { get; set; } = string.Empty;
 
-        public IList<Roles> Roles { get; set; } = new List<Roles>();
+        public IList<string> Roles { get; set; } = new List<string>()
+        {
+            "user"
+        };
     }
 }

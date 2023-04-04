@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Products;
-using Trinity.Domain;
+using Trinity.Domain.Products;
 using Trinity.Persistence.Contracts;
 
 namespace Trinity.Application.Services
@@ -24,14 +24,14 @@ namespace Trinity.Application.Services
             this.mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductsOutput>> GetProductsAsync()
+        public async Task<IEnumerable<ProductsOutput>> GetAsync()
         {
             IEnumerable<Products> products = await this.productStaticPersistence.GetAllAsync();
             IEnumerable<ProductsOutput> productsOutputs = this.mapper.Map<IEnumerable<ProductsOutput>>(products);
             return productsOutputs;
         }
 
-        public async Task<ProductsOutput> AddProductAsync(ProductsInput product)
+        public async Task<ProductsOutput> AddAsync(ProductsInput product)
         {
             Products productToBeAdded = this.mapper.Map<Products>(product);
             ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(productToBeAdded);
@@ -40,7 +40,7 @@ namespace Trinity.Application.Services
             return productOutput;
         }
 
-        public async Task<ProductsOutput?> UpdateProductAsync(ProductsInput productInput, string id)
+        public async Task<ProductsOutput?> UpdateAsync(ProductsInput productInput, string id)
         {
             Products? productToUpdate = await this.productStaticPersistence.GetByIdAsync(id);
 
@@ -62,7 +62,7 @@ namespace Trinity.Application.Services
             return null;
         }
 
-        public async Task<ProductsOutput?> DeleteProductAsync(string id)
+        public async Task<ProductsOutput?> DeleteAsync(string id)
         {
             Products? productToDelete = await this.productStaticPersistence.GetByIdAsync(id);
 
