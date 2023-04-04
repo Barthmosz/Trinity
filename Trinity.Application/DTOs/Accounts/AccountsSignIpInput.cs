@@ -3,13 +3,8 @@ using System.Text.Json.Serialization;
 
 namespace Trinity.Application.DTOs.Users
 {
-    public class AccountsInput
+    public class AccountsSignInInput
     {
-        [JsonPropertyName("name")]
-        [Required(ErrorMessage = "Name is required.")]
-        [StringLength(50, MinimumLength = 3, ErrorMessage = "Name must be at least 3 characters.")]
-        public string Name { get; set; } = string.Empty;
-
         [JsonPropertyName("email")]
         [EmailAddress(ErrorMessage = "Email is not valid.")]
         [Required(ErrorMessage = "Email is required.")]

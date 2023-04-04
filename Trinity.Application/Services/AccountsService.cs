@@ -29,7 +29,7 @@ namespace Trinity.Application.Services
             this.mapper = mapper;
         }
 
-        public async Task<AccountsOutput> SignUpAsync(AccountsInput accountInput)
+        public async Task<AccountsOutput> SignUpAsync(AccountsSignUpInput accountInput)
         {
             Accounts account = this.mapper.Map<Accounts>(accountInput);
             account.PasswordHash = PasswordHasher.Hash(accountInput.Password);
@@ -40,7 +40,7 @@ namespace Trinity.Application.Services
             return accountOutput;
         }
 
-        public async Task<TokenOutput> SignInAsync(AccountsInput accountInput)
+        public async Task<TokenOutput> SignInAsync(AccountsSignInInput accountInput)
         {
             Accounts? account = await this.usersStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new AccountsException("Email not registered.");
 

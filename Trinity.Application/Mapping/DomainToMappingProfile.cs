@@ -12,7 +12,7 @@ namespace Trinity.Application.Mapping
             CreateMap<Products, ProductsInput>().ReverseMap();
             CreateMap<Products, ProductsOutput>().ReverseMap();
 
-            CreateMap<Accounts, AccountsInput>().ReverseMap();
+            CreateMap<Accounts, AccountsSignUpInput>().ReverseMap();
             CreateMap<Accounts, AccountsOutput>().ReverseMap();
         }
     }
