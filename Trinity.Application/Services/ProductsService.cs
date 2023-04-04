@@ -31,31 +31,31 @@ namespace Trinity.Application.Services
             return productsOutputs;
         }
 
-        public async Task<ProductsOutput> AddAsync(ProductsInput product)
+        public async Task<ProductsOutput> AddAsync(ProductsAddInput productInput)
         {
-            Products productToBeAdded = this.mapper.Map<Products>(product);
-            ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(productToBeAdded);
+            Products product = this.mapper.Map<Products>(productInput);
+            ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-            await this.productsBasePersistence.Add(productToBeAdded);
+            await this.productsBasePersistence.Add(product);
             return productOutput;
         }
 
-        public async Task<ProductsOutput?> UpdateAsync(ProductsInput productInput, string id)
+        public async Task<ProductsOutput?> UpdateAsync(ProductsUpdateInput productInput, string id)
         {
-            Products? productToUpdate = await this.productStaticPersistence.GetByIdAsync(id);
+            Products? product = await this.productStaticPersistence.GetByIdAsync(id);
 
-            if (productToUpdate != null)
+            if (product != null)
             {
-                productToUpdate.Name = productInput.Name;
-                productToUpdate.Description = productInput.Description;
-                productToUpdate.Image = productInput.Image;
-                productToUpdate.Quantity = productInput.Quantity;
-                productToUpdate.Price = productInput.Price;
-                productToUpdate.Discount = productInput.Discount;
+                product.Name = productInput.Name;
+                product.Description = productInput.Description;
+                product.Image = productInput.Image;
+                product.Quantity = productInput.Quantity;
+                product.Price = productInput.Price;
+                product.Discount = productInput.Discount;
 
-                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(productToUpdate);
+                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-                await this.productsBasePersistence.Update(productToUpdate);
+                await this.productsBasePersistence.Update(product);
                 return productOutput;
             }
 
@@ -64,11 +64,11 @@ namespace Trinity.Application.Services
 
         public async Task<ProductsOutput?> DeleteAsync(string id)
         {
-            Products? productToDelete = await this.productStaticPersistence.GetByIdAsync(id);
+            Products? product = await this.productStaticPersistence.GetByIdAsync(id);
 
-            if (productToDelete != null)
+            if (product != null)
             {
-                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(productToDelete);
+                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
                 await this.productsBasePersistence.Delete(id);
                 return productOutput;

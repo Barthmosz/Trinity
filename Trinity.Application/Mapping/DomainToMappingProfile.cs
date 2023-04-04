@@ -9,7 +9,7 @@ namespace Trinity.Application.Mapping
     {
         public DomainToMappingProfile()
         {
-            CreateMap<Products, ProductsInput>().ReverseMap();
+            CreateMap<Products, ProductsAddInput>().ReverseMap();
             CreateMap<Products, ProductsOutput>().ReverseMap();
 
             CreateMap<Accounts, AccountsSignUpInput>().ReverseMap();
