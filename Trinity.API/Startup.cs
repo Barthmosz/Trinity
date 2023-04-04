@@ -30,7 +30,10 @@ namespace Trinity.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().ConfigureApiBehaviorOptions(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.Configure<DbOptions>(options =>

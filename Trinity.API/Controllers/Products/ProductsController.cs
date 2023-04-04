@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Trinity.API.Extensions;
 using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Products;
@@ -35,10 +36,15 @@ namespace Trinity.API.Controllers.Product
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] ProductsInput product)
+        public async Task<IActionResult> AddAsync([FromBody] ProductsAddInput product)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ResultViewModel<ProductsOutput>(ModelState.GetErrors()));
+                }
+
                 ProductsOutput productAdded = await this.productService.AddAsync(product);
                 return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<ProductsOutput>(productAdded));
             }
@@ -49,11 +55,16 @@ namespace Trinity.API.Controllers.Product
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromBody] ProductsInput product, [FromRoute] string id)
+        public async Task<IActionResult> UpdateAsync([FromBody] ProductsUpdateInput productInput, [FromRoute] string id)
         {
             try
             {
-                ProductsOutput? productUpdate = await this.productService.UpdateAsync(product, id);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ResultViewModel<ProductsOutput>(ModelState.GetErrors()));
+                }
+
+                ProductsOutput? productUpdate = await this.productService.UpdateAsync(productInput, id);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productUpdate));
             }
             catch (Exception ex)
