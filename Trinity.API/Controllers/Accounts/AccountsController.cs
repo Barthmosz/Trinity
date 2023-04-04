@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Trinity.API.Extensions;
 using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
@@ -21,6 +22,10 @@ namespace Trinity.API.Controllers.Accounts
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
+                }
                 AccountsOutput userCreated = await accountsService.SignUpAsync(account);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<AccountsOutput>(userCreated));
             }
@@ -35,6 +40,10 @@ namespace Trinity.API.Controllers.Accounts
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
+                }
                 TokenOutput token = await accountsService.SignInAsync(account);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<TokenOutput>(token));
             }
