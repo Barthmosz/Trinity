@@ -43,7 +43,7 @@ namespace Trinity.Application.Services
 
             AccountsOutput accountOutput = this.mapper.Map<AccountsOutput>(account);
 
-            await this.usersBasePersistence.Add(account);
+            await this.usersBasePersistence.AddAsync(account);
             return accountOutput;
         }
 

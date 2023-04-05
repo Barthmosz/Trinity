@@ -36,7 +36,7 @@ namespace Trinity.Application.Services
             Products product = this.mapper.Map<Products>(productInput);
             ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-            await this.productsBasePersistence.Add(product);
+            await this.productsBasePersistence.AddAsync(product);
             return productOutput;
         }
 
@@ -55,7 +55,7 @@ namespace Trinity.Application.Services
 
                 ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-                await this.productsBasePersistence.Update(product);
+                await this.productsBasePersistence.UpdateAsync(product);
                 return productOutput;
             }
 
@@ -70,7 +70,7 @@ namespace Trinity.Application.Services
             {
                 ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-                await this.productsBasePersistence.Delete(id);
+                await this.productsBasePersistence.DeleteAsync(id);
                 return productOutput;
             }
 

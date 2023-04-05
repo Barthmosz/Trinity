@@ -4,8 +4,8 @@ namespace Trinity.Persistence.Contracts
 {
     public interface IBasePersistence<D> : IStaticPersistence<D> where D : class
     {
-        Task<bool> Add(D entity);
-        Task<bool> Update(D entity);
-        Task<bool> Delete(string id);
+        Task<bool> AddAsync(D entity);
+        Task<bool> UpdateAsync(D entity);
+        Task<bool> DeleteAsync(string id);
     }
 }
