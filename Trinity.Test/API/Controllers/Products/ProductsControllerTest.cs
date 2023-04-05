@@ -63,14 +63,14 @@ namespace Trinity.Test.API.Controllers.Product
 
         #region GetAsync
         [Test]
-        public async Task Ensure_GetAsync_Returns_Ok_If_Persistence_Returns_Products()
+        public async Task GetAsync_Should_Return_Ok_If_Persistence_Returns_Products()
         {
             ObjectResult? result = await this.productsController.GetAsync() as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 
         [Test]
-        public async Task Ensure_GetAsync_Returns_InternalServerError_If_Persistence_Throws()
+        public async Task GetAsync_Should_Return_InternalServerError_If_Persistence_Throws()
         {
             this.productsStaticPersistence.Setup(p => p.GetAllAsync()).Throws(new Exception());
 
