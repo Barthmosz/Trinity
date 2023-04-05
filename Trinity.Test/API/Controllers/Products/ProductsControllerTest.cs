@@ -55,5 +55,14 @@ namespace Trinity.Test.API.Controllers.Product
             ObjectResult? result = await this.productsController.GetAsync() as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
+
+        [Test]
+        public async Task Ensure_GetAsync_Returns_InternalServerError_If_Persistence_Throws()
+        {
+            this.productsStaticPersistence.Setup(p => p.GetAllAsync()).Throws(new Exception());
+
+            ObjectResult? result = await this.productsController.GetAsync() as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
+        }
     }
 }
