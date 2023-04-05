@@ -5,7 +5,7 @@ using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Users;
 using Trinity.Application.Exceptions.Accounts;
-using Trinity.Domain.Accounts;
+using Trinity.Domain.Entities.Accounts;
 using Trinity.Persistence.Contracts;
 
 namespace Trinity.Application.Services

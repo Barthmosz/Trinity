@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Products;
-using Trinity.Domain.Products;
+using Trinity.Domain.Entities.Products;
 using Trinity.Persistence.Contracts;
 
 namespace Trinity.Application.Services
@@ -48,7 +48,7 @@ namespace Trinity.Application.Services
             {
                 product.Name = productInput.Name;
                 product.Description = productInput.Description;
-                product.Image = productInput.Image;
+                product.ImageUrl = productInput.ImageUrl;
                 product.Quantity = productInput.Quantity;
                 product.Price = productInput.Price;
                 product.Discount = productInput.Discount;

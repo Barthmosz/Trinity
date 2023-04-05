@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Trinity.Domain.Base;
 
-namespace Trinity.Domain.Products
+namespace Trinity.Domain.Entities.Products
 {
     public class Products : Document
     {
@@ -16,7 +16,7 @@ namespace Trinity.Domain.Products
 
         [BsonRequired]
         [BsonRepresentation(BsonType.String)]
-        public string Image { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
         [BsonRequired]
         [BsonRepresentation(BsonType.Int32)]

@@ -14,7 +14,7 @@ namespace Trinity.Application.DTOs.Products
         public string Description { get; set; } = string.Empty;
 
         [JsonPropertyName("image")]
-        public string Image { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("quantity")]
         [Range(1, 999, ErrorMessage = "Quantity must be greater than 0")]

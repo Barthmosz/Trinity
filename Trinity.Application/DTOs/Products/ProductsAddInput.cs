@@ -15,8 +15,8 @@ namespace Trinity.Application.DTOs.Products
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Description must be at least 3 characters.")]
         public string Description { get; set; } = string.Empty;
 
-        [JsonPropertyName("image")]
-        public string Image { get; set; } = string.Empty;
+        [JsonPropertyName("imageUrl")]
+        public string ImageUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("quantity")]
         [Required(ErrorMessage = "Quantity is required.")]

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using Trinity.Domain.Accounts;
+using Trinity.Domain.Entities.Accounts;
 
 namespace Trinity.Application.Extensions
 {

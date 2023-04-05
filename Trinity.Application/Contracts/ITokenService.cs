@@ -1,5 +1,5 @@
 ﻿using Trinity.Application.DTOs.Accounts;
-using Trinity.Domain.Accounts;
+using Trinity.Domain.Entities.Accounts;
 
 namespace Trinity.Application.Contracts
 {

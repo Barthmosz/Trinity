@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Trinity.Domain.Base;
 
-namespace Trinity.Domain.Accounts
+namespace Trinity.Domain.Entities.Accounts
 {
     public class Accounts : Document
     {

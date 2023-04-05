@@ -7,7 +7,7 @@ using System.Text;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.Extensions;
-using Trinity.Domain.Accounts;
+using Trinity.Domain.Entities.Accounts;
 
 namespace Trinity.Application.Services
 {

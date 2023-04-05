@@ -1,7 +1,7 @@
 ﻿using Trinity.Application.DTOs.Products;
 using Trinity.Application.DTOs.Users;
-using Trinity.Domain.Accounts;
-using Trinity.Domain.Products;
+using Trinity.Domain.Entities.Accounts;
+using Trinity.Domain.Entities.Products;
 
 namespace Trinity.Application.Mapping
 {
