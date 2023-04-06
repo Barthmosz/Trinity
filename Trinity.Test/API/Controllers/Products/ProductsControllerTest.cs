@@ -81,6 +81,14 @@ namespace Trinity.Test.API.Controllers.Product
 
         #region AddAsync
         [Test]
+        public async Task AddAsync_Should_Return_BadRequest_If_Input_Is_Invalid()
+        {
+            this.productsController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await this.productsController.AddAsync(this.productsAddInput) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+        }
+
+        [Test]
         public async Task AddAsync_Should_Return_Created_If_Persistence_Returns_True()
         {
             ObjectResult? result = await this.productsController.AddAsync(this.productsAddInput) as ObjectResult;
