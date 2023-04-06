@@ -24,7 +24,7 @@ namespace Trinity.Test.API.Controllers.Product
         private ProductsController productsController;
         private IProductsService productsService;
 
-        private Products product;
+        private Products? product;
         private IEnumerable<Products> products;
 
         private ProductsAddInput productsAddInput;
@@ -39,7 +39,7 @@ namespace Trinity.Test.API.Controllers.Product
                 Description = "any_description",
                 ImageUrl = "any_image_url",
                 Price = 1,
-                Quantity = 1                
+                Quantity = 1
             };
             this.productsUpdateInput = new()
             {
@@ -65,6 +65,7 @@ namespace Trinity.Test.API.Controllers.Product
             };
 
             this.productsStaticPersistence.Setup(p => p.GetAllAsync()).Returns(Task.FromResult(this.products));
+            this.productsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(this.product)!);
             this.productsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Products>())).Returns(Task.FromResult(true));
             this.productsBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Products>())).Returns(Task.FromResult(true));
 
@@ -122,6 +123,15 @@ namespace Trinity.Test.API.Controllers.Product
         {
             ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, "any_id") as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
+        }
+
+        [Test]
+        public async Task UpdateAsync_Should_Return_InternalServerError_If_Persistence_Throws()
+        {
+            this.productsBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Products>())).Throws(new Exception());
+
+            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, "any_id") as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion
     }
