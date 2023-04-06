@@ -17,6 +17,8 @@ namespace Trinity.Test.API.Controllers.Product
 {
     public class ProductsControllerTest
     {
+        private const string productId = "any_id";
+
         private readonly Mock<IStaticPersistence<Products>> productsStaticPersistence = new();
         private readonly Mock<IBasePersistence<Products>> productsBasePersistence = new();
         private readonly Mock<IMapper> mapper = new();
@@ -119,9 +121,17 @@ namespace Trinity.Test.API.Controllers.Product
 
         #region UpdateAsync
         [Test]
+        public async Task UpdateAsync_Should_Return_BadRequest_If_Input_Is_Invalid()
+        {
+            this.productsController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, productId) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+        }
+
+        [Test]
         public async Task UpdateAsync_Should_Return_Ok_If_Persistence_Returns_True()
         {
-            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, "any_id") as ObjectResult;
+            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, productId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 
@@ -130,7 +140,7 @@ namespace Trinity.Test.API.Controllers.Product
         {
             this.productsBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Products>())).Throws(new Exception());
 
-            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, "any_id") as ObjectResult;
+            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, productId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion
