@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Trinity.Domain.Base;
 using Trinity.Persistence.Contexts;
 using Trinity.Persistence.Persistence;
-using Trinity.Test.Context;
+using Trinity.Test.Configs.Context;
 
 namespace Trinity.Test.Persistence
 {

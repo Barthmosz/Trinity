@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Trinity.Test.Utils
+namespace Trinity.Test.Configs.Utils
 {
     internal static class MongoDbContextUtil
     {

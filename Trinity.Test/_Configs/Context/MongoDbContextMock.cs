@@ -3,9 +3,9 @@ using Moq;
 using System.Collections.Generic;
 using Trinity.Persistence.ConnectionConfig;
 using Trinity.Persistence.Contexts;
-using Trinity.Test.Utils;
+using Trinity.Test.Configs.Utils;
 
-namespace Trinity.Test.Context
+namespace Trinity.Test.Configs.Context
 {
     public class MongoDbContextMock : MongoDbContext
     {
@@ -28,7 +28,7 @@ namespace Trinity.Test.Context
 
         public void InitCollection<T>(IEnumerable<T> initialList)
         {
-            this.mongoDatabaseMock.CreateMockCollection(initialList);
+            mongoDatabaseMock.CreateMockCollection(initialList);
         }
     }
 }
