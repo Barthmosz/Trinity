@@ -28,6 +28,7 @@ namespace Trinity.Test.API.Controllers.Product
         private IEnumerable<Products> products;
 
         private ProductsAddInput productsAddInput;
+        private ProductsUpdateInput productsUpdateInput;
 
         [SetUp]
         public void SetUp()
@@ -39,6 +40,15 @@ namespace Trinity.Test.API.Controllers.Product
                 ImageUrl = "any_image_url",
                 Price = 1,
                 Quantity = 1                
+            };
+            this.productsUpdateInput = new()
+            {
+                Name = "any_name",
+                Description = "any_description",
+                ImageUrl = "any_image_url",
+                Price = 1,
+                Quantity = 1,
+                Discount = 0.5m
             };
             this.product = new()
             {
@@ -56,6 +66,7 @@ namespace Trinity.Test.API.Controllers.Product
 
             this.productsStaticPersistence.Setup(p => p.GetAllAsync()).Returns(Task.FromResult(this.products));
             this.productsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Products>())).Returns(Task.FromResult(true));
+            this.productsBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Products>())).Returns(Task.FromResult(true));
 
             this.productsService = new ProductsService(this.productsStaticPersistence.Object, this.productsBasePersistence.Object, this.mapper.Object);
             this.productsController = new(this.productsService);
@@ -102,6 +113,15 @@ namespace Trinity.Test.API.Controllers.Product
 
             ObjectResult? result = await this.productsController.AddAsync(this.productsAddInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
+        }
+        #endregion
+
+        #region UpdateAsync
+        [Test]
+        public async Task UpdateAsync_Should_Return_Ok_If_Persistence_Returns_True()
+        {
+            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, "any_id") as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
         #endregion
     }
