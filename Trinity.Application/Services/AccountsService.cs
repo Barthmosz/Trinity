@@ -5,6 +5,7 @@ using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Users;
 using Trinity.Application.Exceptions.Accounts;
+using Trinity.Application.Wrappers;
 using Trinity.Domain.Entities.Accounts;
 using Trinity.Persistence.Contracts;
 
@@ -14,17 +15,20 @@ namespace Trinity.Application.Services
     {
         private readonly IStaticPersistence<Accounts> usersStaticPersistence;
         private readonly IBasePersistence<Accounts> usersBasePersistence;
+        private readonly IPasswordHasherWrapper passwordHasher;
         private readonly ITokenService tokenService;
         private readonly IMapper mapper;
 
         public AccountsService(
             IStaticPersistence<Accounts> usersStaticPersistence,
             IBasePersistence<Accounts> usersBasePersistence,
+            IPasswordHasherWrapper passwordHasher,
             ITokenService tokenService,
             IMapper mapper)
         {
             this.usersStaticPersistence = usersStaticPersistence;
             this.usersBasePersistence = usersBasePersistence;
+            this.passwordHasher = passwordHasher;
             this.tokenService = tokenService;
             this.mapper = mapper;
         }
@@ -51,7 +55,7 @@ namespace Trinity.Application.Services
         {
             Accounts? account = await this.usersStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new AccountsException("Email not registered.");
 
-            if (!PasswordHasher.Verify(account.PasswordHash, accountInput.Password))
+            if (!this.passwordHasher.Verify(account.PasswordHash, accountInput.Password))
             {
                 throw new AccountsException("Invalid email or password.");
             }
