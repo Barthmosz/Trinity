@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -9,6 +10,7 @@ using System.Text;
 using Trinity.Application.Contracts;
 using Trinity.Application.Mapping;
 using Trinity.Application.Services;
+using Trinity.Application.Wrappers;
 using Trinity.Domain.Entities.Accounts;
 using Trinity.Domain.Entities.Products;
 using Trinity.Persistence;
@@ -74,6 +76,7 @@ namespace Trinity.API
             services.AddScoped<IConnectionConfig, ConnectionConfig>();
             services.AddScoped<IMongoDbContext, MongoDbContext>();
 
+            services.AddScoped<IPasswordHasherWrapper, PasswordHasherWrapper>();
             services.AddScoped<ITokenService, TokenService>();
 
             services.AddScoped<IStaticPersistence<Products>, StaticPersistence<Products>>();
