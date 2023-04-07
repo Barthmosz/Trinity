@@ -153,6 +153,15 @@ namespace Trinity.Test.API.Controllers.Product
             ObjectResult? result = await this.productsController.DeleteAsync(productId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
+
+        [Test]
+        public async Task DeleteAsync_Should_Return_InternalServerError_If_Persistence_Throws()
+        {
+            this.productsBasePersistence.Setup(p => p.DeleteAsync(It.IsAny<string>())).Throws(new Exception());
+
+            ObjectResult? result = await this.productsController.DeleteAsync(productId) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
+        }
         #endregion
     }
 }
