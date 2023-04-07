@@ -58,11 +58,21 @@ namespace Trinity.Test.API.Controllers.Account
 
         }
 
+        #region SignUp
+        [Test]
+        public async Task SignUp_Should_Return_BadRequest_If_Input_Is_Invalid()
+        {
+            this.accountsController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+        }
+
         [Test]
         public async Task SignUp_Should_Return_Created_If_Persistence_Returns_True()
         {
             ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.Created));
         }
+        #endregion
     }
 }
