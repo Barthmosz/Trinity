@@ -112,6 +112,14 @@ namespace Trinity.Test.API.Controllers.Account
 
         #region SignIn
         [Test]
+        public async Task SignIn_Should_Return_BadRequest_If_Input_Is_Invalid()
+        {
+            this.accountsController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+        }
+
+        [Test]
         public async Task SignIn_Should_Return_Ok_If_Email_And_Password_Are_Valid()
         {
             this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.accountExists)!);
