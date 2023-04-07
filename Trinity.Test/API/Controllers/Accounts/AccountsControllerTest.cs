@@ -118,6 +118,14 @@ namespace Trinity.Test.API.Controllers.Account
             ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
+
+        [Test]
+        public async Task SignIn_Should_Return_BadRequest_If_Email_Is_Not_Registered()
+        {
+            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.account));
+            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+        }
         #endregion
     }
 }
