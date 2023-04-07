@@ -134,6 +134,15 @@ namespace Trinity.Test.API.Controllers.Account
             ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
+
+        [Test]
+        public async Task SignIn_Should_Return_InternalServerError_If_Persistence_Throws()
+        {
+            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Throws(new Exception());
+
+            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
+        }
         #endregion
     }
 }
