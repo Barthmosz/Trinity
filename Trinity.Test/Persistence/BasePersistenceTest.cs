@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Trinity.Domain.Base;
 using Trinity.Persistence.Contexts;
 using Trinity.Persistence.Persistence;
-using Trinity.Test.Context;
+using Trinity.Test.Configs.Context;
 
 namespace Trinity.Test.Persistence
 {
@@ -30,23 +30,23 @@ namespace Trinity.Test.Persistence
         }
 
         [Test]
-        public async Task AddOk()
+        public async Task AddAsyncOk()
         {
-            bool result = await this.basePersistence.Add(this.document);
+            bool result = await this.basePersistence.AddAsync(this.document);
             Assert.That(result, Is.EqualTo(true));
         }
 
         [Test]
-        public async Task UpdateOk()
+        public async Task UpdateAsyncOk()
         {
-            bool result = await this.basePersistence.Update(this.document);
+            bool result = await this.basePersistence.UpdateAsync(this.document);
             Assert.That(result, Is.EqualTo(true));
         }
 
         [Test]
-        public async Task DeleteOk()
+        public async Task DeleteAsyncOk()
         {
-            bool result = await this.basePersistence.Delete("any_id");
+            bool result = await this.basePersistence.DeleteAsync("any_id");
             Assert.That(result, Is.EqualTo(true));
         }
     }

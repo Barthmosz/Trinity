@@ -9,13 +9,13 @@ namespace Trinity.Persistence.Persistence
     {
         public BasePersistence(IMongoDbContext mongoDbContext) : base(mongoDbContext) { }
 
-        public async Task<bool> Add(D entity)
+        public async Task<bool> AddAsync(D entity)
         {
             await this.MongoCollection.InsertOneAsync(entity);
             return true;
         }
 
-        public async Task<bool> Update(D entity)
+        public async Task<bool> UpdateAsync(D entity)
         {
             string id = entity.GetType().GetProperty("Id")?.GetValue(entity)?.ToString() ?? string.Empty;
             FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
@@ -23,7 +23,7 @@ namespace Trinity.Persistence.Persistence
             return result.ModifiedCount > 0;
         }
 
-        public async Task<bool> Delete(string id)
+        public async Task<bool> DeleteAsync(string id)
         {
             FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
             DeleteResult result = await this.MongoCollection.DeleteOneAsync(filter);
