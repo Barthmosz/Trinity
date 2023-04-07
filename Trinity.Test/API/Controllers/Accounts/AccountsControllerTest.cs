@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Net;
 using System.Threading.Tasks;
 using Trinity.API.Controllers.Accounts;
@@ -72,6 +73,15 @@ namespace Trinity.Test.API.Controllers.Account
         {
             ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.Created));
+        }
+
+        [Test]
+        public async Task SignUp_Should_Return_InternalServerError_If_Persistence_Throws()
+        {
+            this.accountsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Accounts>())).Throws(new Exception());
+
+            ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion
     }
