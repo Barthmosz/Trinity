@@ -17,8 +17,15 @@ namespace Trinity.API.Controllers.Accounts
     [Route("v1/[Controller]")]
     public class AccountsController : ControllerBase
     {
+        private readonly IAccountsService accountsService;
+
+        public AccountsController(IAccountsService accountsService)
+        {
+            this.accountsService = accountsService;
+        }
+
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] AccountsSignUpInput accountInput, [FromServices] IAccountsService accountsService)
+        public async Task<IActionResult> SignUp([FromBody] AccountsSignUpInput accountInput)
         {
             try
             {
@@ -27,8 +34,8 @@ namespace Trinity.API.Controllers.Accounts
                     return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
                 }
 
-                AccountsOutput userCreated = await accountsService.SignUpAsync(accountInput);
-                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<AccountsOutput>(userCreated));
+                AccountsOutput userCreated = await this.accountsService.SignUpAsync(accountInput);
+                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<AccountsOutput>(userCreated));
             }
             catch (AccountsException ex)
             {
@@ -41,7 +48,7 @@ namespace Trinity.API.Controllers.Accounts
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] AccountsSignInInput accountInput, [FromServices] IAccountsService accountsService)
+        public async Task<IActionResult> SignIn([FromBody] AccountsSignInInput accountInput)
         {
             try
             {
@@ -50,7 +57,7 @@ namespace Trinity.API.Controllers.Accounts
                     return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
                 }
 
-                TokenOutput token = await accountsService.SignInAsync(accountInput);
+                TokenOutput token = await this.accountsService.SignInAsync(accountInput);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<TokenOutput>(token));
             }
             catch (AccountsException ex)
