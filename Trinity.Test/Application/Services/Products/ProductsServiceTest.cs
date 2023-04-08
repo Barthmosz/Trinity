@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Products;
+using Trinity.Application.Exceptions.Products;
 using Trinity.Application.Services;
 using Trinity.Domain.Entities.Products;
 using Trinity.Persistence.Contracts;
@@ -27,7 +28,7 @@ namespace Trinity.Test.Application.Services.Product
         private ProductsOutput productOutput;
         private IEnumerable<ProductsOutput> productsOutput;
 
-        private Products product;
+        private Products? product;
         private IEnumerable<Products> products;
 
         [SetUp]
@@ -101,6 +102,15 @@ namespace Trinity.Test.Application.Services.Product
         #endregion
 
         #region UpdateAsync
+        [Test]
+        public void UpdateAsync_Throws_If_Product_Does_Not_Exists()
+        {
+            this.product = null;
+            this.productsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(this.product));
+
+            Assert.ThrowsAsync<ProductsException>(async () => await this.productsService.UpdateAsync(this.productUpdateInput, productId));
+        }
+
         [Test]
         public async Task UpdateAsync_Returns_Updated_Product()
         {
