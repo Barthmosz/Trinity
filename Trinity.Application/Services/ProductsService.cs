@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Products;
+using Trinity.Application.Exceptions.Products;
 using Trinity.Domain.Entities.Products;
 using Trinity.Persistence.Contracts;
 
@@ -40,41 +41,29 @@ namespace Trinity.Application.Services
             return productOutput;
         }
 
-        public async Task<ProductsOutput?> UpdateAsync(ProductsUpdateInput productInput, string id)
+        public async Task<ProductsOutput> UpdateAsync(ProductsUpdateInput productInput, string id)
         {
-            Products? product = await this.productStaticPersistence.GetByIdAsync(id);
+            Products? product = await this.productStaticPersistence.GetByIdAsync(id) ?? throw new ProductsException("Product not found.");
+            product.Name = productInput.Name;
+            product.Description = productInput.Description;
+            product.ImageUrl = productInput.ImageUrl;
+            product.Quantity = productInput.Quantity;
+            product.Price = productInput.Price;
+            product.Discount = productInput.Discount;
 
-            if (product != null)
-            {
-                product.Name = productInput.Name;
-                product.Description = productInput.Description;
-                product.ImageUrl = productInput.ImageUrl;
-                product.Quantity = productInput.Quantity;
-                product.Price = productInput.Price;
-                product.Discount = productInput.Discount;
+            ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
-
-                await this.productsBasePersistence.UpdateAsync(product);
-                return productOutput;
-            }
-
-            return null;
+            await this.productsBasePersistence.UpdateAsync(product);
+            return productOutput;
         }
 
-        public async Task<ProductsOutput?> DeleteAsync(string id)
+        public async Task<ProductsOutput> DeleteAsync(string id)
         {
-            Products? product = await this.productStaticPersistence.GetByIdAsync(id);
+            Products? product = await this.productStaticPersistence.GetByIdAsync(id) ?? throw new ProductsException("Product not found.");
+            ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
 
-            if (product != null)
-            {
-                ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
-
-                await this.productsBasePersistence.DeleteAsync(id);
-                return productOutput;
-            }
-
-            return null;
+            await this.productsBasePersistence.DeleteAsync(id);
+            return productOutput;
         }
     }
 }

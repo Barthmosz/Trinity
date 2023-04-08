@@ -7,6 +7,7 @@ using Trinity.API.Extensions;
 using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Products;
+using Trinity.Application.Exceptions.Products;
 
 namespace Trinity.API.Controllers.Product
 {
@@ -31,7 +32,7 @@ namespace Trinity.API.Controllers.Product
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<string>(ex.Message));
             }
         }
 
@@ -50,7 +51,7 @@ namespace Trinity.API.Controllers.Product
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<ProductsOutput>(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<string>(ex.Message));
             }
         }
 
@@ -67,9 +68,13 @@ namespace Trinity.API.Controllers.Product
                 ProductsOutput? productUpdate = await this.productService.UpdateAsync(productInput, id);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productUpdate));
             }
+            catch (ProductsException ex)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<string>(ex.Message));
+            }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<ProductsOutput>(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<string>(ex.Message));
             }
         }
 
@@ -81,9 +86,13 @@ namespace Trinity.API.Controllers.Product
                 ProductsOutput? productDeleted = await this.productService.DeleteAsync(id);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productDeleted));
             }
+            catch (ProductsException ex)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<ProductsOutput>(ex.Message));
+            }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<ProductsOutput>(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<string>(ex.Message));
             }
         }
     }

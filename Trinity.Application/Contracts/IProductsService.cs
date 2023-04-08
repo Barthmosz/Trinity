@@ -8,7 +8,7 @@ namespace Trinity.Application.Contracts
     {
         Task<IEnumerable<ProductsOutput>> GetAsync();
         Task<ProductsOutput> AddAsync(ProductsAddInput productInput);
-        Task<ProductsOutput?> UpdateAsync(ProductsUpdateInput productInput, string id);
-        Task<ProductsOutput?> DeleteAsync(string id);
+        Task<ProductsOutput> UpdateAsync(ProductsUpdateInput productInput, string id);
+        Task<ProductsOutput> DeleteAsync(string id);
     }
 }

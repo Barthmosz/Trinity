@@ -148,6 +148,16 @@ namespace Trinity.Test.API.Controllers.Product
 
         #region DeleteAsync
         [Test]
+        public async Task DeleteAsync_Should_Return_BadRequest_If_Product_Does_Not_Exists()
+        {
+            this.product = null;
+            this.productsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(this.product));
+
+            ObjectResult? result = await this.productsController.DeleteAsync(productId) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+        }
+
+        [Test]
         public async Task DeleteAsync_Should_Return_Ok_If_Persistence_Returns_True()
         {
             ObjectResult? result = await this.productsController.DeleteAsync(productId) as ObjectResult;
