@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SecureIdentity.Password;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 using Trinity.API.Controllers.Accounts;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Users;
+using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.Services;
 using Trinity.Application.Wrappers;
 using Trinity.Domain.Entities.Accounts;

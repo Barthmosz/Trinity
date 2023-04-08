@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Products;
-using Trinity.Application.DTOs.Users;
 using Trinity.Domain.Entities.Accounts;
 using Trinity.Domain.Entities.Products;
 

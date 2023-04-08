@@ -4,7 +4,6 @@ using NUnit.Framework;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
-using Trinity.Application.DTOs.Users;
 using Trinity.Application.Exceptions.Accounts;
 using Trinity.Application.Services;
 using Trinity.Application.Wrappers;
