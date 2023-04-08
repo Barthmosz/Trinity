@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
+using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.DTOs.Users;
 using Trinity.Application.Exceptions.Accounts;
 using Trinity.Application.Services;
@@ -26,6 +27,7 @@ namespace Trinity.Test.Application.Services.Account
         private AccountsSignInInput accountSignInInput;
         private Accounts? account;
         private AccountsOutput accountOutput;
+        private TokenOutput tokenOutput;
 
         [SetUp]
         public void SetUp()
@@ -53,9 +55,16 @@ namespace Trinity.Test.Application.Services.Account
                 Email = "any_email@mail.com",
                 PasswordHash = "any_password_hash"
             };
+            this.tokenOutput = new()
+            {
+                Token = "any_token"
+            };
 
+            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(this.account);
             this.mapper.Setup(m => m.Map<Accounts>(this.accountSignUpInput)).Returns(this.account);
             this.mapper.Setup(m => m.Map<AccountsOutput>(this.account)).Returns(this.accountOutput);
+            this.tokenService.Setup(t => t.GenerateToken(this.account)).Returns(this.tokenOutput);
+            this.passwordHasher.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(true);
 
             this.accountsService = new AccountsService(this.accountsStaticPersistence.Object, this.accountsBasePersistence.Object, this.passwordHasher.Object, this.tokenService.Object, this.mapper.Object);
         }
@@ -82,8 +91,9 @@ namespace Trinity.Test.Application.Services.Account
 
         #region SignIn
         [Test]
-        public void SignInAsync_Should_Throw_If_Email_Already_Exists()
+        public void SignInAsync_Should_Throw_If_Email_Does_Not_Exists()
         {
+            this.account = null;
             this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(this.account);
 
             Assert.ThrowsAsync<AccountsException>(async () => await this.accountsService.SignInAsync(this.accountSignInInput));
@@ -95,6 +105,13 @@ namespace Trinity.Test.Application.Services.Account
             this.passwordHasher.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(false);
 
             Assert.ThrowsAsync<AccountsException>(async () => await this.accountsService.SignInAsync(this.accountSignInInput));
+        }
+
+        [Test]
+        public async Task SignInAsync_Should_Return_Token_If_Email_And_Password_Are_Correct()
+        {
+            TokenOutput result = await this.accountsService.SignInAsync(this.accountSignInInput);
+            Assert.That(result, Is.EqualTo(this.tokenOutput));
         }
         #endregion
     }
