@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Moq;
 using NUnit.Framework;
+using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Users;
 using Trinity.Application.Exceptions.Accounts;
@@ -22,7 +23,8 @@ namespace Trinity.Test.Application.Services.Account
         private IAccountsService accountsService;
 
         private AccountsSignUpInput accountSignUpInput;
-        private Accounts account;
+        private Accounts? account;
+        private AccountsOutput accountOutput;
 
         [SetUp]
         public void SetUp()
@@ -33,11 +35,21 @@ namespace Trinity.Test.Application.Services.Account
                 Email = "any_email@mail.com",
                 Password = "any_password"
             };
-            this.account = new()
+            this.accountOutput = new()
             {
+                Id = "any_id",
                 Name = "any_name",
                 Email = "any_email@mail.com"
             };
+            this.account = new()
+            {
+                Name = "any_name",
+                Email = "any_email@mail.com",
+                PasswordHash = "any_password_hash"
+            };
+
+            this.mapper.Setup(m => m.Map<Accounts>(this.accountSignUpInput)).Returns(this.account);
+            this.mapper.Setup(m => m.Map<AccountsOutput>(this.account)).Returns(this.accountOutput);
 
             this.accountsService = new AccountsService(this.accountsStaticPersistence.Object, this.accountsBasePersistence.Object, this.passwordHasher.Object, this.tokenService.Object, this.mapper.Object);
         }
@@ -48,6 +60,16 @@ namespace Trinity.Test.Application.Services.Account
             this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(this.account);
 
             Assert.ThrowsAsync<AccountsException>(async () => await this.accountsService.SignUpAsync(this.accountSignUpInput));
+        }
+
+        [Test]
+        public async Task SignUpAsync_Should_Return_Created_Account()
+        {
+            this.account = null;
+            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(this.account);
+
+            AccountsOutput result = await this.accountsService.SignUpAsync(this.accountSignUpInput);
+            Assert.That(result, Is.EqualTo(this.accountOutput));
         }
     }
 }
