@@ -59,7 +59,7 @@ namespace Trinity.Test.Application.Services.Product
         [Test]
         public async Task GetAsync_Returns_ProductsOutput()
         {
-            var result = await this.productsService.GetAsync();
+            IEnumerable<ProductsOutput> result = await this.productsService.GetAsync();
             Assert.That(result, Is.EqualTo(this.productsOutput));
         }
         #endregion
