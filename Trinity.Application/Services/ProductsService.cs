@@ -41,7 +41,7 @@ namespace Trinity.Application.Services
             return productOutput;
         }
 
-        public async Task<ProductsOutput?> UpdateAsync(ProductsUpdateInput productInput, string id)
+        public async Task<ProductsOutput> UpdateAsync(ProductsUpdateInput productInput, string id)
         {
             Products? product = await this.productStaticPersistence.GetByIdAsync(id) ?? throw new ProductsException("Product not found.");
             product.Name = productInput.Name;
@@ -57,7 +57,7 @@ namespace Trinity.Application.Services
             return productOutput;
         }
 
-        public async Task<ProductsOutput?> DeleteAsync(string id)
+        public async Task<ProductsOutput> DeleteAsync(string id)
         {
             Products? product = await this.productStaticPersistence.GetByIdAsync(id) ?? throw new ProductsException("Product not found.");
             ProductsOutput productOutput = this.mapper.Map<ProductsOutput>(product);
