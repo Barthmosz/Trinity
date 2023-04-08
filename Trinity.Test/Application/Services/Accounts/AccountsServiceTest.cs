@@ -88,6 +88,14 @@ namespace Trinity.Test.Application.Services.Account
 
             Assert.ThrowsAsync<AccountsException>(async () => await this.accountsService.SignInAsync(this.accountSignInInput));
         }
+
+        [Test]
+        public void SignInAsync_Should_Throw_If_Password_Is_Wrong()
+        {
+            this.passwordHasher.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(false);
+
+            Assert.ThrowsAsync<AccountsException>(async () => await this.accountsService.SignInAsync(this.accountSignInInput));
+        }
         #endregion
     }
 }
