@@ -39,11 +39,11 @@ namespace Trinity.API.Controllers.Accounts
             }
             catch (AccountsException ex)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
+                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<string>(ex.Message));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<string>(ex.Message));
             }
         }
 
@@ -62,11 +62,11 @@ namespace Trinity.API.Controllers.Accounts
             }
             catch (AccountsException ex)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
+                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<string>(ex.Message));
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<IEnumerable<ProductsOutput>>(ex.Message));
+                return StatusCode((int)HttpStatusCode.InternalServerError, new ResultViewModel<string>(ex.Message));
             }
         }
     }

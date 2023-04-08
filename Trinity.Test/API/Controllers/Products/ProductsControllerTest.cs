@@ -154,7 +154,7 @@ namespace Trinity.Test.API.Controllers.Product
             this.productsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(this.product));
 
             ObjectResult? result = await this.productsController.DeleteAsync(productId) as ObjectResult;
-            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
