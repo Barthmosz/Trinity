@@ -45,16 +45,7 @@ namespace Trinity.API
                 options.Name = this.Configuration.GetSection("DatabaseSettings:Name").Value;
             });
 
-            string? jwtKey = this.Configuration.GetSection("JwtKey").Value;
-            byte[] key;
-            if (jwtKey == null)
-            {
-                key = Encoding.ASCII.GetBytes("jwt_secret_key");
-            }
-            else
-            {
-                key = Encoding.ASCII.GetBytes(jwtKey);
-            }
+            byte[] key = Encoding.ASCII.GetBytes(this.Configuration.GetSection("JwtKey").Value!);
 
             services.AddAuthentication(options =>
             {
