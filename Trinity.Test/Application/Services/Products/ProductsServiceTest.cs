@@ -13,6 +13,8 @@ namespace Trinity.Test.Application.Services.Product
 {
     public class ProductsServiceTest
     {
+        private const string productId = "any_id";
+
         private readonly Mock<IStaticPersistence<Products>> productsStaticPersistence = new();
         private readonly Mock<IBasePersistence<Products>> productsBasePersistence = new();
         private readonly Mock<ITokenService> tokenService = new();
@@ -21,6 +23,7 @@ namespace Trinity.Test.Application.Services.Product
         private IProductsService productsService;
 
         private ProductsAddInput productAddInput;
+        private ProductsUpdateInput productUpdateInput;
         private ProductsOutput productOutput;
         private IEnumerable<ProductsOutput> productsOutput;
 
@@ -35,6 +38,15 @@ namespace Trinity.Test.Application.Services.Product
                 Name = "any_name",
                 Description = "any_description",
                 Quantity = 1,
+                ImageUrl = "any_image_url",
+                Price = 10
+            };
+            this.productUpdateInput = new()
+            {
+                Name = "any_name",
+                Description = "any_description",
+                Quantity = 1,
+                Discount = 1,
                 ImageUrl = "any_image_url",
                 Price = 10
             };
@@ -63,7 +75,9 @@ namespace Trinity.Test.Application.Services.Product
             this.mapper.Setup(m => m.Map<IEnumerable<ProductsOutput>>(this.products)).Returns(this.productsOutput);
             this.mapper.Setup(m => m.Map<Products>(this.productAddInput)).Returns(this.product);
             this.mapper.Setup(m => m.Map<ProductsOutput>(this.product)).Returns(this.productOutput);
+
             this.productsStaticPersistence.Setup(p => p.GetAllAsync()).Returns(Task.FromResult(this.products));
+            this.productsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(this.product)!);
 
             this.productsService = new ProductsService(this.productsStaticPersistence.Object, this.productsBasePersistence.Object, this.mapper.Object);
         }
@@ -82,6 +96,15 @@ namespace Trinity.Test.Application.Services.Product
         public async Task AddAsync_Returns_Created_Product()
         {
             ProductsOutput result = await this.productsService.AddAsync(this.productAddInput);
+            Assert.That(result, Is.EqualTo(this.productOutput));
+        }
+        #endregion
+
+        #region UpdateAsync
+        [Test]
+        public async Task UpdateAsync_Returns_Updated_Product()
+        {
+            ProductsOutput? result = await this.productsService.UpdateAsync(this.productUpdateInput, productId);
             Assert.That(result, Is.EqualTo(this.productOutput));
         }
         #endregion
