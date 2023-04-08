@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,6 +12,7 @@ using Trinity.Domain.Entities.Accounts;
 
 namespace Trinity.Application.Services
 {
+    [ExcludeFromCodeCoverage]
     public class TokenService : ITokenService
     {
         public TokenOutput GenerateToken(Accounts account)
