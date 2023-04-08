@@ -37,9 +37,16 @@ namespace Trinity.Test.Persistence
         }
 
         [Test]
-        public async Task GetByIdOk()
+        public async Task GetByIdAsyncOk()
         {
             Document? result = await this.staticPersistence.GetByIdAsync("any_id");
+            Assert.That(result, Is.EqualTo(this.document));
+        }
+
+        [Test]
+        public async Task GetByEmailAsyncOk()
+        {
+            Document? result = await this.staticPersistence.GetByEmailAsync("any_email@mail.com");
             Assert.That(result, Is.EqualTo(this.document));
         }
     }
