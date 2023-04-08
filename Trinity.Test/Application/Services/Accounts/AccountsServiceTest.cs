@@ -23,6 +23,7 @@ namespace Trinity.Test.Application.Services.Account
         private IAccountsService accountsService;
 
         private AccountsSignUpInput accountSignUpInput;
+        private AccountsSignInInput accountSignInInput;
         private Accounts? account;
         private AccountsOutput accountOutput;
 
@@ -32,6 +33,11 @@ namespace Trinity.Test.Application.Services.Account
             this.accountSignUpInput = new()
             {
                 Name = "any_name",
+                Email = "any_email@mail.com",
+                Password = "any_password"
+            };
+            this.accountSignInInput = new()
+            {
                 Email = "any_email@mail.com",
                 Password = "any_password"
             };
@@ -54,6 +60,7 @@ namespace Trinity.Test.Application.Services.Account
             this.accountsService = new AccountsService(this.accountsStaticPersistence.Object, this.accountsBasePersistence.Object, this.passwordHasher.Object, this.tokenService.Object, this.mapper.Object);
         }
 
+        #region SignUp
         [Test]
         public void SignUpAsync_Should_Throw_If_Email_Already_Exists()
         {
@@ -71,5 +78,16 @@ namespace Trinity.Test.Application.Services.Account
             AccountsOutput result = await this.accountsService.SignUpAsync(this.accountSignUpInput);
             Assert.That(result, Is.EqualTo(this.accountOutput));
         }
+        #endregion
+
+        #region SignIn
+        [Test]
+        public void SignInAsync_Should_Throw_If_Email_Already_Exists()
+        {
+            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(this.account);
+
+            Assert.ThrowsAsync<AccountsException>(async () => await this.accountsService.SignInAsync(this.accountSignInInput));
+        }
+        #endregion
     }
 }
