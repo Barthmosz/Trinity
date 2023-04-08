@@ -118,5 +118,16 @@ namespace Trinity.Test.Application.Services.Product
             Assert.That(result, Is.EqualTo(this.productOutput));
         }
         #endregion
+
+        #region DeleteAsync
+        [Test]
+        public void DeleteAsync_Throws_If_Product_Does_Not_Exists()
+        {
+            this.product = null;
+            this.productsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(this.product));
+
+            Assert.ThrowsAsync<ProductsException>(async () => await this.productsService.DeleteAsync(productId));
+        }
+        #endregion
     }
 }
