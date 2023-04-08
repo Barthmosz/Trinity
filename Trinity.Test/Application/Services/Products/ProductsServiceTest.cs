@@ -128,6 +128,13 @@ namespace Trinity.Test.Application.Services.Product
 
             Assert.ThrowsAsync<ProductsException>(async () => await this.productsService.DeleteAsync(productId));
         }
+
+        [Test]
+        public async Task DeleteAsync_Returns_Deleted_Product()
+        {
+            ProductsOutput? result = await this.productsService.DeleteAsync(productId);
+            Assert.That(result, Is.EqualTo(this.productOutput));
+        }
         #endregion
     }
 }
