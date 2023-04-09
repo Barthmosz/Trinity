@@ -9,6 +9,7 @@ using Trinity.Application.Services;
 using Trinity.Application.Wrappers;
 using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
+using Trinity.Test.Factories;
 
 namespace Trinity.Test.Application.Services
 {
@@ -33,29 +34,10 @@ namespace Trinity.Test.Application.Services
         [SetUp]
         public void SetUp()
         {
-            AccountSignUpInput = new()
-            {
-                Name = "any_name",
-                Email = "any_email@mail.com",
-                Password = "any_password"
-            };
-            AccountSignInInput = new()
-            {
-                Email = "any_email@mail.com",
-                Password = "any_password"
-            };
-            AccountOutput = new()
-            {
-                Id = "any_id",
-                Name = "any_name",
-                Email = "any_email@mail.com"
-            };
-            Account = new()
-            {
-                Name = "any_name",
-                Email = "any_email@mail.com",
-                PasswordHash = "any_password_hash"
-            };
+            AccountSignUpInput = AccountFactory.MakeAccountSignUpInput();
+            AccountSignInInput = AccountFactory.MakeAccountSignInInput();
+            AccountOutput = AccountFactory.MakeAccountOutput();
+            Account = AccountFactory.MakeAccount();
             TokenOutput = new()
             {
                 Token = "any_token"

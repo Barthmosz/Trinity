@@ -12,6 +12,7 @@ using Trinity.Application.Services;
 using Trinity.Application.Wrappers;
 using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
+using Trinity.Test.Factories;
 
 namespace Trinity.Test.API.Controllers
 {
@@ -37,28 +38,10 @@ namespace Trinity.Test.API.Controllers
         [SetUp]
         public void SetUp()
         {
-            AccountSignUpInput = new()
-            {
-                Name = "any_name",
-                Email = "any_email@mail.com",
-                Password = "any_password"
-            };
-            AccountSignInInput = new()
-            {
-                Email = "any_email@mail.com",
-                Password = "any_password"
-            };
-            AccountOutput = new()
-            {
-                Id = "any_id",
-                Name = "any_name",
-                Email = "any_email@mail.com"
-            };
-            AccountExists = new()
-            {
-                Name = "any_name",
-                Email = "any_email@mail.com"
-            };
+            AccountSignUpInput = AccountFactory.MakeAccountSignUpInput();
+            AccountSignInInput = AccountFactory.MakeAccountSignInInput();
+            AccountOutput = AccountFactory.MakeAccountOutput();
+            AccountExists = AccountFactory.MakeAccount();
             Account = null;
 
             Mapper.Setup(m => m.Map<Account>(AccountSignUpInput)).Returns(AccountExists);
