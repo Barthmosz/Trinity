@@ -12,8 +12,8 @@ namespace Trinity.Persistence.ConnectionConfig
 
         public ConnectionConfig(IOptions<DbOptions> options)
         {
-            this.MongoClient = new MongoClient(options.Value.Connection);
-            this.MongoDatabase = this.MongoClient.GetDatabase(options.Value.Name);
+            MongoClient = new MongoClient(options.Value.Connection);
+            MongoDatabase = MongoClient.GetDatabase(options.Value.Name);
         }
     }
 }

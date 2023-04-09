@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using SecureIdentity.Password;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
@@ -12,54 +11,54 @@ namespace Trinity.Application.Services
 {
     public class AccountsService : IAccountsService
     {
-        private readonly IStaticPersistence<Accounts> accountsStaticPersistence;
-        private readonly IBasePersistence<Accounts> accountsBasePersistence;
-        private readonly IPasswordHasherWrapper passwordHasher;
-        private readonly ITokenService tokenService;
-        private readonly IMapper mapper;
+        private readonly IStaticPersistence<Accounts> AccountsStaticPersistence;
+        private readonly IDynamicPersistence<Accounts> AccountsBasePersistence;
+        private readonly IPasswordHasherWrapper PasswordHasherWrapper;
+        private readonly ITokenService TokenService;
+        private readonly IMapper Mapper;
 
         public AccountsService(
             IStaticPersistence<Accounts> accountsStaticPersistence,
-            IBasePersistence<Accounts> accountsBasePersistence,
-            IPasswordHasherWrapper passwordHasher,
+            IDynamicPersistence<Accounts> accountsBasePersistence,
+            IPasswordHasherWrapper passwordHasherWrapper,
             ITokenService tokenService,
             IMapper mapper)
         {
-            this.accountsStaticPersistence = accountsStaticPersistence;
-            this.accountsBasePersistence = accountsBasePersistence;
-            this.passwordHasher = passwordHasher;
-            this.tokenService = tokenService;
-            this.mapper = mapper;
+            AccountsStaticPersistence = accountsStaticPersistence;
+            AccountsBasePersistence = accountsBasePersistence;
+            PasswordHasherWrapper = passwordHasherWrapper;
+            TokenService = tokenService;
+            Mapper = mapper;
         }
 
         public async Task<AccountsOutput> SignUpAsync(AccountsSignUpInput accountInput)
         {
-            Accounts? accountExists = await this.accountsStaticPersistence.GetByEmailAsync(accountInput.Email);
+            Accounts? accountExists = await AccountsStaticPersistence.GetByEmailAsync(accountInput.Email);
 
             if (accountExists != null)
             {
                 throw new AccountsException("Email already registered.");
             }
 
-            Accounts account = this.mapper.Map<Accounts>(accountInput);
-            account.PasswordHash = PasswordHasher.Hash(accountInput.Password);
+            Accounts account = Mapper.Map<Accounts>(accountInput);
+            account.PasswordHash = PasswordHasherWrapper.Hash(accountInput.Password);
 
-            AccountsOutput accountOutput = this.mapper.Map<AccountsOutput>(account);
+            AccountsOutput accountOutput = Mapper.Map<AccountsOutput>(account);
 
-            await this.accountsBasePersistence.AddAsync(account);
+            await AccountsBasePersistence.AddAsync(account);
             return accountOutput;
         }
 
         public async Task<TokenOutput> SignInAsync(AccountsSignInInput accountInput)
         {
-            Accounts? account = await this.accountsStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new AccountsException("Email not registered.");
+            Accounts? account = await AccountsStaticPersistence.GetByEmailAsync(accountInput.Email) ?? throw new AccountsException("Email not registered.");
 
-            if (!this.passwordHasher.Verify(account.PasswordHash, accountInput.Password))
+            if (!PasswordHasherWrapper.Verify(account.PasswordHash, accountInput.Password))
             {
                 throw new AccountsException("Invalid email or password.");
             }
 
-            TokenOutput token = this.tokenService.GenerateToken(account);
+            TokenOutput token = TokenService.GenerateToken(account);
             return token;
         }
     }

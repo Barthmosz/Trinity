@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace Trinity.Test.Configs.Utils
 {
-    internal static class MongoDbContextUtil
+    public static class MongoDbContextUtil
     {
-        internal static void CreateMockCollection<T>(this Mock<IMongoDatabase> mongoDatabaseMock, IEnumerable<T> collectionList)
+        public static void CreateMockCollection<T>(this Mock<IMongoDatabase> mongoDatabaseMock, IEnumerable<T> collectionList)
         {
             Mock<IMongoCollection<T>> mongoCollectionMock = new();
             mongoCollectionMock.InitMongoCollection(collectionList);
             mongoDatabaseMock.Setup(m => m.GetCollection<T>(It.IsAny<string>(), It.IsAny<MongoCollectionSettings>())).Returns(mongoCollectionMock.Object);
         }
 
-        private static void InitMongoCollection<T>(this Mock<IMongoCollection<T>> mongoCollectionMock, IEnumerable<T> collectionList)
+        public static void InitMongoCollection<T>(this Mock<IMongoCollection<T>> mongoCollectionMock, IEnumerable<T> collectionList)
         {
             Mock<IAsyncCursor<T>> cursorMock = new();
             Mock<DeleteResult> deleteMock = new();

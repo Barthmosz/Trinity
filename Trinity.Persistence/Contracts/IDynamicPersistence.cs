@@ -2,7 +2,7 @@
 
 namespace Trinity.Persistence.Contracts
 {
-    public interface IBasePersistence<D> : IStaticPersistence<D> where D : class
+    public interface IDynamicPersistence<D> where D : class
     {
         Task<bool> AddAsync(D entity);
         Task<bool> UpdateAsync(D entity);

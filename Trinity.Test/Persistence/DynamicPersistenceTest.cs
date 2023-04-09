@@ -12,10 +12,10 @@ using Trinity.Test.Configs.Context;
 
 namespace Trinity.Test.Persistence
 {
-    public class StaticPersistenceTest
+    public class DynamicPersistenceTest
     {
         private IMongoDbContext MongoDbContext;
-        private IStaticPersistence<Document> StaticPersistence;
+        private IDynamicPersistence<Document> BasePersistence;
         private IDocument Document;
         private IEnumerable<Document> Documents;
 
@@ -27,33 +27,33 @@ namespace Trinity.Test.Persistence
 
             MongoDbContext = new MongoDbContextMock(new Mock<IMongoDatabase>());
             ((MongoDbContextMock)MongoDbContext).InitCollection(Documents);
-            StaticPersistence = new StaticPersistence<Document>(MongoDbContext);
+            BasePersistence = new DynamicPersistence<Document>(MongoDbContext);
         }
 
-        #region GetAllAsync
+        #region AddAsync
         [Test]
-        public async Task GetAllAsyncOk()
+        public async Task AddAsyncOk()
         {
-            IEnumerable<Document> result = await StaticPersistence.GetAllAsync();
-            Assert.That(result, Is.EqualTo(Documents));
-        }
-        #endregion
-
-        #region GetById
-        [Test]
-        public async Task GetByIdAsyncOk()
-        {
-            Document? result = await StaticPersistence.GetByIdAsync("any_id");
-            Assert.That(result, Is.EqualTo(Document));
+            bool result = await BasePersistence.AddAsync((Document)Document);
+            Assert.That(result, Is.EqualTo(true));
         }
         #endregion
 
-        #region GetByEmail
+        #region UpdateAsync
         [Test]
-        public async Task GetByEmailAsyncOk()
+        public async Task UpdateAsyncOk()
         {
-            Document? result = await StaticPersistence.GetByEmailAsync("any_email@mail.com");
-            Assert.That(result, Is.EqualTo(Document));
+            bool result = await BasePersistence.UpdateAsync((Document)Document);
+            Assert.That(result, Is.EqualTo(true));
+        }
+        #endregion
+
+        #region DeleteAsync
+        [Test]
+        public async Task DeleteAsyncOk()
+        {
+            bool result = await BasePersistence.DeleteAsync("any_id");
+            Assert.That(result, Is.EqualTo(true));
         }
         #endregion
     }
