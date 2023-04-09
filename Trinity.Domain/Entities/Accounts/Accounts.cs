@@ -11,7 +11,7 @@ namespace Trinity.Domain.Entities.Accounts
 
         public string PasswordHash { get; set; } = string.Empty;
 
-        public IList<string> Roles { get; set; } = new List<string>()
+        public IEnumerable<string> Roles { get; set; } = new List<string>()
         {
             "user"
         };

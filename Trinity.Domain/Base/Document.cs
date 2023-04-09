@@ -8,9 +8,9 @@ namespace Trinity.Domain.Base
     {
         public Document()
         {
-            this.Id = Guid.NewGuid().ToString();
-            this.RegistrationDate = DateTime.Now;
-            this.LastModifiedDate = DateTime.Now;
+            Id = Guid.NewGuid().ToString();
+            RegistrationDate = DateTime.Now;
+            LastModifiedDate = DateTime.Now;
         }
 
         [BsonId]
