@@ -17,7 +17,7 @@ using Trinity.Test.Factories;
 namespace Trinity.Test.Unit.API.Controllers
 {
     [TestFixture]
-    public class AccountsControllerTest
+    public class AccountControllerTest
     {
         private readonly Mock<IStaticPersistence<Account>> AccountStaticPersistence = new();
         private readonly Mock<IDynamicPersistence<Account>> AccountBasePersistence = new();
@@ -33,7 +33,6 @@ namespace Trinity.Test.Unit.API.Controllers
         private AccountOutput AccountOutput;
 
         private Account? Account;
-        private Account AccountExists;
 
         [SetUp]
         public void SetUp()
@@ -41,12 +40,11 @@ namespace Trinity.Test.Unit.API.Controllers
             AccountSignUpInput = AccountFactory.MakeAccountSignUpInput();
             AccountSignInInput = AccountFactory.MakeAccountSignInInput();
             AccountOutput = AccountFactory.MakeAccountOutput();
-            AccountExists = AccountFactory.MakeAccount();
-            Account = null;
+            Account = AccountFactory.MakeAccount();
 
-            Mapper.Setup(m => m.Map<Account>(AccountSignUpInput)).Returns(AccountExists);
+            Mapper.Setup(m => m.Map<Account>(AccountSignUpInput)).Returns(Account);
             Mapper.Setup(m => m.Map<AccountOutput>(Account)).Returns(AccountOutput);
-            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account));
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account)!);
             AccountBasePersistence.Setup(p => p.AddAsync(It.IsAny<Account>())).Returns(Task.FromResult(true));
             PasswordHasherWrapper.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(true);
 
@@ -66,6 +64,8 @@ namespace Trinity.Test.Unit.API.Controllers
         [Test]
         public async Task SignUp_Should_Return_Created_If_Persistence_Returns_True()
         {
+            Account = null;
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account));
             ObjectResult? result = await AccountController.SignUp(AccountSignUpInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.Created));
         }
@@ -86,6 +86,8 @@ namespace Trinity.Test.Unit.API.Controllers
         [Test]
         public async Task SignUp_Should_Return_InternalServerError_If_Persistence_Throws()
         {
+            Account = null;
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account));
             AccountBasePersistence.Setup(p => p.AddAsync(It.IsAny<Account>())).Throws(new Exception());
 
             ObjectResult? result = await AccountController.SignUp(AccountSignUpInput) as ObjectResult;
@@ -105,7 +107,7 @@ namespace Trinity.Test.Unit.API.Controllers
         [Test]
         public async Task SignIn_Should_Return_Ok_If_Email_And_Password_Are_Valid()
         {
-            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(AccountExists)!);
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account)!);
             ObjectResult? result = await AccountController.SignIn(AccountSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
@@ -113,6 +115,7 @@ namespace Trinity.Test.Unit.API.Controllers
         [Test]
         public async Task SignIn_Should_Return_BadRequest_If_Email_Is_Not_Registered()
         {
+            this.Account = null;
             AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account));
             ObjectResult? result = await AccountController.SignIn(AccountSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
@@ -121,7 +124,7 @@ namespace Trinity.Test.Unit.API.Controllers
         [Test]
         public async Task SignIn_Should_Return_BadRequest_If_Password_Is_Not_Correct()
         {
-            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(AccountExists)!);
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account)!);
             PasswordHasherWrapper.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(false);
             ObjectResult? result = await AccountController.SignIn(AccountSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
