@@ -7,9 +7,9 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Accounts;
+using Trinity.Application.DTOs.Account;
 using Trinity.Application.Extensions;
-using Trinity.Domain.Entities.Accounts;
+using Trinity.Domain.Entities;
 
 namespace Trinity.Application.Services
 {
@@ -23,7 +23,7 @@ namespace Trinity.Application.Services
             this.Configuration = configuration;
         }
 
-        public TokenOutput GenerateToken(Accounts account)
+        public TokenOutput GenerateToken(Account account)
         {
             JwtSecurityTokenHandler tokenHandler = new();
             byte[] key = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtKey").Value!);

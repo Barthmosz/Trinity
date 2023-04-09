@@ -1,6 +1,6 @@
-﻿namespace Trinity.Application.DTOs.Accounts
+﻿namespace Trinity.Application.DTOs.Account
 {
-    public class AccountsOutput
+    public class AccountOutput
     {
         public string Id { get; set; } = string.Empty;
 

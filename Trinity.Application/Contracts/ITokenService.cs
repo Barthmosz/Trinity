@@ -1,10 +1,10 @@
-﻿using Trinity.Application.DTOs.Accounts;
-using Trinity.Domain.Entities.Accounts;
+﻿using Trinity.Application.DTOs.Account;
+using Trinity.Domain.Entities;
 
 namespace Trinity.Application.Contracts
 {
     public interface ITokenService
     {
-        TokenOutput GenerateToken(Accounts account);
+        TokenOutput GenerateToken(Account account);
     }
 }

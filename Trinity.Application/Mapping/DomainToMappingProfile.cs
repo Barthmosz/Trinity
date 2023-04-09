@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Trinity.Application.DTOs.Accounts;
-using Trinity.Application.DTOs.Products;
-using Trinity.Domain.Entities.Accounts;
-using Trinity.Domain.Entities.Products;
+using Trinity.Application.DTOs.Account;
+using Trinity.Application.DTOs.Product;
+using Trinity.Domain.Entities;
 
 namespace Trinity.Application.Mapping
 {
@@ -11,11 +10,11 @@ namespace Trinity.Application.Mapping
     {
         public DomainToMappingProfile()
         {
-            CreateMap<Products, ProductsAddInput>().ReverseMap();
-            CreateMap<Products, ProductsOutput>().ReverseMap();
+            CreateMap<Product, ProductAddInput>().ReverseMap();
+            CreateMap<Product, ProductOutput>().ReverseMap();
 
-            CreateMap<Accounts, AccountsSignUpInput>().ReverseMap();
-            CreateMap<Accounts, AccountsOutput>().ReverseMap();
+            CreateMap<Account, AccountSignUpInput>().ReverseMap();
+            CreateMap<Account, AccountOutput>().ReverseMap();
         }
     }
 }

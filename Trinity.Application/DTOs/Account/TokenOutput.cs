@@ -1,4 +1,4 @@
-﻿namespace Trinity.Application.DTOs.Accounts
+﻿namespace Trinity.Application.DTOs.Account
 {
     public class TokenOutput
     {

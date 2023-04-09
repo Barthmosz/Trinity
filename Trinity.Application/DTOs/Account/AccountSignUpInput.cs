@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Trinity.Application.DTOs.Accounts
+namespace Trinity.Application.DTOs.Account
 {
-    public class AccountsSignUpInput
+    public class AccountSignUpInput
     {
         [JsonPropertyName("name")]
         [Required(ErrorMessage = "Name is required.")]

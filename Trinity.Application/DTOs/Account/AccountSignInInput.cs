@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Trinity.Application.DTOs.Accounts
+namespace Trinity.Application.DTOs.Account
 {
-    public class AccountsSignInInput
+    public class AccountSignInInput
     {
         [JsonPropertyName("email")]
         [EmailAddress(ErrorMessage = "Email is not valid.")]

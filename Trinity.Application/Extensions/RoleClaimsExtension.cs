@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Security.Claims;
-using Trinity.Domain.Entities.Accounts;
+using Trinity.Domain.Entities;
 
 namespace Trinity.Application.Extensions
 {
@@ -11,7 +11,7 @@ namespace Trinity.Application.Extensions
     public static class RoleClaimsExtension
     {
         [Authorize]
-        public static IEnumerable<Claim> GetClaims(this Accounts account)
+        public static IEnumerable<Claim> GetClaims(this Account account)
         {
             List<Claim> result = new()
             {

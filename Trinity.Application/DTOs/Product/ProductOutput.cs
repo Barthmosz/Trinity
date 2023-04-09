@@ -1,6 +1,6 @@
-﻿namespace Trinity.Application.DTOs.Products
+﻿namespace Trinity.Application.DTOs.Product
 {
-    public class ProductsOutput
+    public class ProductOutput
     {
         public string Id { get; set; } = string.Empty;
 
