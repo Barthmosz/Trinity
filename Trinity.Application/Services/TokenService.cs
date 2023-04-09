@@ -16,17 +16,17 @@ namespace Trinity.Application.Services
     [ExcludeFromCodeCoverage]
     public class TokenService : ITokenService
     {
-        private readonly IConfiguration configuration;
+        private readonly IConfiguration Configuration;
 
         public TokenService(IConfiguration configuration)
         {
-            this.configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public TokenOutput GenerateToken(Accounts account)
         {
             JwtSecurityTokenHandler tokenHandler = new();
-            byte[] key = Encoding.ASCII.GetBytes(this.configuration.GetSection("JwtKey").Value!);
+            byte[] key = Encoding.ASCII.GetBytes(Configuration.GetSection("JwtKey").Value!);
             IEnumerable<Claim> claims = account.GetClaims();
             SecurityTokenDescriptor tokenDescriptor = new()
             {
