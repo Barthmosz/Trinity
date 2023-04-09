@@ -25,6 +25,15 @@ namespace Trinity.Test.Factories
             };
         }
 
+        public static AccountOutput MakeAccountOutput()
+        {
+            return new AccountOutput()
+            {
+                Name = "any_name",
+                Email = "any_email@mail.com"
+            };
+        }
+
         public static Account MakeAccount()
         {
             return new Account()
