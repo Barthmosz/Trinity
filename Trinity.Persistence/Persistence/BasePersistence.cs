@@ -5,13 +5,13 @@ namespace Trinity.Persistence.Persistence
 {
     public class BasePersistence<D> where D : class
     {
-        protected IMongoDbContext mongoDbContext;
-        protected IMongoCollection<D> mongoCollection;
+        protected IMongoDbContext MongoDbContext;
+        protected IMongoCollection<D> MongoCollection;
 
         public BasePersistence(IMongoDbContext mongoDbContext)
         {
-            this.mongoDbContext = mongoDbContext;
-            this.mongoCollection = this.mongoDbContext.GetCollection<D>();
+            MongoDbContext = mongoDbContext;
+            MongoCollection = mongoDbContext.GetCollection<D>();
         }
     }
 }

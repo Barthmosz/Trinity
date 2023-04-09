@@ -5,16 +5,16 @@ namespace Trinity.Persistence.Contexts
 {
     public class MongoDbContext : IMongoDbContext
     {
-        private readonly IConnectionConfig connectionConfig;
+        private readonly IConnectionConfig ConnectionConfig;
 
         public MongoDbContext(IConnectionConfig connectionConfig)
         {
-            this.connectionConfig = connectionConfig;
+            ConnectionConfig = connectionConfig;
         }
 
         public IMongoCollection<T> GetCollection<T>()
         {
-            return this.connectionConfig.MongoDatabase.GetCollection<T>(typeof(T).Name);
+            return ConnectionConfig.MongoDatabase.GetCollection<T>(typeof(T).Name);
         }
     }
 }

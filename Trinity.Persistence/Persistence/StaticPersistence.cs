@@ -14,18 +14,18 @@ namespace Trinity.Persistence.Persistence
 
         public async Task<IEnumerable<D>> GetAllAsync()
         {
-            return await this.mongoCollection.Find(Builders<D>.Filter.Empty).ToListAsync();
+            return await MongoCollection.Find(Builders<D>.Filter.Empty).ToListAsync();
         }
 
         public async Task<D?> GetByIdAsync(string id)
         {
-            IAsyncCursor<D> entity = await this.mongoCollection.FindAsync(Builders<D>.Filter.Eq(IdKey, id));
+            IAsyncCursor<D> entity = await MongoCollection.FindAsync(Builders<D>.Filter.Eq(IdKey, id));
             return entity.FirstOrDefault();
         }
 
         public async Task<D?> GetByEmailAsync(string email)
         {
-            IAsyncCursor<D> entity = await this.mongoCollection.FindAsync(Builders<D>.Filter.Eq("Email", email));
+            IAsyncCursor<D> entity = await MongoCollection.FindAsync(Builders<D>.Filter.Eq("Email", email));
             return entity.FirstOrDefault();
         }
     }

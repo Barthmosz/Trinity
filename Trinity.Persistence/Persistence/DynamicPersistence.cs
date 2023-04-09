@@ -11,7 +11,7 @@ namespace Trinity.Persistence.Persistence
 
         public async Task<bool> AddAsync(D entity)
         {
-            await this.mongoCollection.InsertOneAsync(entity);
+            await MongoCollection.InsertOneAsync(entity);
             return true;
         }
 
@@ -19,14 +19,14 @@ namespace Trinity.Persistence.Persistence
         {
             string id = entity.GetType().GetProperty("Id")!.GetValue(entity)!.ToString()!;
             FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
-            ReplaceOneResult result = await this.mongoCollection.ReplaceOneAsync(filter, entity);
+            ReplaceOneResult result = await MongoCollection.ReplaceOneAsync(filter, entity);
             return result.ModifiedCount > 0;
         }
 
         public async Task<bool> DeleteAsync(string id)
         {
             FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
-            DeleteResult result = await this.mongoCollection.DeleteOneAsync(filter);
+            DeleteResult result = await MongoCollection.DeleteOneAsync(filter);
             return result.DeletedCount > 0;
         }
     }
