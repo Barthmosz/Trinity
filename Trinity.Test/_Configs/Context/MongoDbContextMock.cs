@@ -9,11 +9,11 @@ namespace Trinity.Test.Configs.Context
 {
     public class MongoDbContextMock : MongoDbContext
     {
-        private readonly Mock<IMongoDatabase> mongoDatabaseMock;
+        private readonly Mock<IMongoDatabase> MongoDatabaseMock;
 
         public MongoDbContextMock(Mock<IMongoDatabase> mongoDatabaseMock) : base(GetConnectionConfig(mongoDatabaseMock))
         {
-            this.mongoDatabaseMock = mongoDatabaseMock;
+            MongoDatabaseMock = mongoDatabaseMock;
         }
 
         internal static IConnectionConfig GetConnectionConfig(Mock<IMongoDatabase> mongoDatabaseMock)
@@ -28,7 +28,7 @@ namespace Trinity.Test.Configs.Context
 
         public void InitCollection<T>(IEnumerable<T> initialList)
         {
-            mongoDatabaseMock.CreateMockCollection(initialList);
+            MongoDatabaseMock.CreateMockCollection(initialList);
         }
     }
 }

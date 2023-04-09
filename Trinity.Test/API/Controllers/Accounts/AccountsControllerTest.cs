@@ -17,94 +17,94 @@ namespace Trinity.Test.API.Controllers.Account
 {
     public class AccountsControllerTest
     {
-        private readonly Mock<IStaticPersistence<Accounts>> accountsStaticPersistence = new();
-        private readonly Mock<IDynamicPersistence<Accounts>> accountsBasePersistence = new();
-        private readonly Mock<IPasswordHasherWrapper> passwordHasher = new();
-        private readonly Mock<ITokenService> tokenService = new();
-        private readonly Mock<IMapper> mapper = new();
+        private readonly Mock<IStaticPersistence<Accounts>> AccountsStaticPersistence = new();
+        private readonly Mock<IDynamicPersistence<Accounts>> AccountsBasePersistence = new();
+        private readonly Mock<IPasswordHasherWrapper> PasswordHasherWrapper = new();
+        private readonly Mock<ITokenService> TokenService = new();
+        private readonly Mock<IMapper> Mapper = new();
 
-        private IAccountsService accountsService;
-        private AccountsController accountsController;
+        private IAccountsService AccountsService;
+        private AccountsController AccountsController;
 
-        private AccountsSignUpInput accountsSignUpInput;
-        private AccountsSignInInput accountsSignInInput;
-        private AccountsOutput accountsOutput;
+        private AccountsSignUpInput AccountsSignUpInput;
+        private AccountsSignInInput AccountsSignInInput;
+        private AccountsOutput AccountsOutput;
 
-        private Accounts? account;
-        private Accounts accountExists;
+        private Accounts? Account;
+        private Accounts AccountExists;
 
         [SetUp]
         public void SetUp()
         {
-            this.accountsSignUpInput = new()
+            AccountsSignUpInput = new()
             {
                 Name = "any_name",
                 Email = "any_email@mail.com",
                 Password = "any_password"
             };
-            this.accountsSignInInput = new()
+            AccountsSignInInput = new()
             {
                 Email = "any_email@mail.com",
                 Password = "any_password"
             };
-            this.accountsOutput = new()
+            AccountsOutput = new()
             {
                 Id = "any_id",
                 Name = "any_name",
                 Email = "any_email@mail.com"
             };
-            this.accountExists = new()
+            AccountExists = new()
             {
                 Name = "any_name",
                 Email = "any_email@mail.com"
             };
-            this.account = null;
+            Account = null;
 
-            this.mapper.Setup(m => m.Map<Accounts>(this.accountsSignUpInput)).Returns(this.accountExists);
-            this.mapper.Setup(m => m.Map<AccountsOutput>(this.account)).Returns(this.accountsOutput);
-            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.account));
-            this.accountsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Accounts>())).Returns(Task.FromResult(true));
-            this.passwordHasher.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(true);
+            Mapper.Setup(m => m.Map<Accounts>(AccountsSignUpInput)).Returns(AccountExists);
+            Mapper.Setup(m => m.Map<AccountsOutput>(Account)).Returns(AccountsOutput);
+            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account));
+            AccountsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Accounts>())).Returns(Task.FromResult(true));
+            PasswordHasherWrapper.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(true);
 
-            this.accountsService = new AccountsService(this.accountsStaticPersistence.Object, this.accountsBasePersistence.Object, this.passwordHasher.Object, this.tokenService.Object, this.mapper.Object);
-            this.accountsController = new(this.accountsService);
+            AccountsService = new AccountsService(AccountsStaticPersistence.Object, AccountsBasePersistence.Object, PasswordHasherWrapper.Object, TokenService.Object, Mapper.Object);
+            AccountsController = new(AccountsService);
         }
 
         #region SignUp
         [Test]
         public async Task SignUp_Should_Return_BadRequest_If_Input_Is_Invalid()
         {
-            this.accountsController.ModelState.AddModelError("name", "Name is required.");
-            ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
+            AccountsController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await AccountsController.SignUp(AccountsSignUpInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task SignUp_Should_Return_Created_If_Persistence_Returns_True()
         {
-            ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
+            ObjectResult? result = await AccountsController.SignUp(AccountsSignUpInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.Created));
         }
 
         [Test]
         public async Task SignUp_Should_Return_BadRequest_If_Account_Exists()
         {
-            this.account = new()
+            Account = new()
             {
                 Name = "any_name",
                 Email = "any_email@mail.com"
             };
-            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.account)!);
-            ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
+            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account)!);
+            ObjectResult? result = await AccountsController.SignUp(AccountsSignUpInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task SignUp_Should_Return_InternalServerError_If_Persistence_Throws()
         {
-            this.accountsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Accounts>())).Throws(new Exception());
+            AccountsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Accounts>())).Throws(new Exception());
 
-            ObjectResult? result = await this.accountsController.SignUp(this.accountsSignUpInput) as ObjectResult;
+            ObjectResult? result = await AccountsController.SignUp(AccountsSignUpInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion
@@ -113,42 +113,42 @@ namespace Trinity.Test.API.Controllers.Account
         [Test]
         public async Task SignIn_Should_Return_BadRequest_If_Input_Is_Invalid()
         {
-            this.accountsController.ModelState.AddModelError("name", "Name is required.");
-            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            AccountsController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await AccountsController.SignIn(AccountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task SignIn_Should_Return_Ok_If_Email_And_Password_Are_Valid()
         {
-            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.accountExists)!);
-            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(AccountExists)!);
+            ObjectResult? result = await AccountsController.SignIn(AccountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 
         [Test]
         public async Task SignIn_Should_Return_BadRequest_If_Email_Is_Not_Registered()
         {
-            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.account));
-            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(Account));
+            ObjectResult? result = await AccountsController.SignIn(AccountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task SignIn_Should_Return_BadRequest_If_Password_Is_Not_Correct()
         {
-            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.accountExists)!);
-            this.passwordHasher.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(false);
-            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(AccountExists)!);
+            PasswordHasherWrapper.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(false);
+            ObjectResult? result = await AccountsController.SignIn(AccountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task SignIn_Should_Return_InternalServerError_If_Persistence_Throws()
         {
-            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Throws(new Exception());
+            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Throws(new Exception());
 
-            ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
+            ObjectResult? result = await AccountsController.SignIn(AccountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion

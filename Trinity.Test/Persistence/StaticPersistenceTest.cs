@@ -14,28 +14,28 @@ namespace Trinity.Test.Persistence
 {
     public class StaticPersistenceTest
     {
-        private IMongoDbContext mongoDbContext;
-        private IStaticPersistence<Document> staticPersistence;
-        private IDocument document;
-        private IEnumerable<Document> documents;
+        private IMongoDbContext MongoDbContext;
+        private IStaticPersistence<Document> StaticPersistence;
+        private IDocument Document;
+        private IEnumerable<Document> Documents;
 
         [SetUp]
         public void SetUp()
         {
-            this.document = new Document();
-            this.documents = Enumerable.Repeat((Document)this.document, 500).ToList();
+            Document = new Document();
+            Documents = Enumerable.Repeat((Document)Document, 500).ToList();
 
-            this.mongoDbContext = new MongoDbContextMock(new Mock<IMongoDatabase>());
-            ((MongoDbContextMock)this.mongoDbContext).InitCollection(this.documents);
-            this.staticPersistence = new StaticPersistence<Document>(this.mongoDbContext);
+            MongoDbContext = new MongoDbContextMock(new Mock<IMongoDatabase>());
+            ((MongoDbContextMock)MongoDbContext).InitCollection(Documents);
+            StaticPersistence = new StaticPersistence<Document>(MongoDbContext);
         }
 
         #region GetAllAsync
         [Test]
         public async Task GetAllAsyncOk()
         {
-            IEnumerable<Document> result = await this.staticPersistence.GetAllAsync();
-            Assert.That(result, Is.EqualTo(this.documents));
+            IEnumerable<Document> result = await StaticPersistence.GetAllAsync();
+            Assert.That(result, Is.EqualTo(Documents));
         }
         #endregion
 
@@ -43,8 +43,8 @@ namespace Trinity.Test.Persistence
         [Test]
         public async Task GetByIdAsyncOk()
         {
-            Document? result = await this.staticPersistence.GetByIdAsync("any_id");
-            Assert.That(result, Is.EqualTo(this.document));
+            Document? result = await StaticPersistence.GetByIdAsync("any_id");
+            Assert.That(result, Is.EqualTo(Document));
         }
         #endregion
 
@@ -52,8 +52,8 @@ namespace Trinity.Test.Persistence
         [Test]
         public async Task GetByEmailAsyncOk()
         {
-            Document? result = await this.staticPersistence.GetByEmailAsync("any_email@mail.com");
-            Assert.That(result, Is.EqualTo(this.document));
+            Document? result = await StaticPersistence.GetByEmailAsync("any_email@mail.com");
+            Assert.That(result, Is.EqualTo(Document));
         }
         #endregion
     }

@@ -14,27 +14,27 @@ namespace Trinity.Test.Persistence
 {
     public class DynamicPersistenceTest
     {
-        private IMongoDbContext mongoDbContext;
-        private IDynamicPersistence<Document> basePersistence;
-        private IDocument document;
-        private IEnumerable<Document> documents;
+        private IMongoDbContext MongoDbContext;
+        private IDynamicPersistence<Document> BasePersistence;
+        private IDocument Document;
+        private IEnumerable<Document> Documents;
 
         [SetUp]
         public void SetUp()
         {
-            this.document = new Document();
-            this.documents = Enumerable.Repeat((Document)this.document, 500).ToList();
+            Document = new Document();
+            Documents = Enumerable.Repeat((Document)Document, 500).ToList();
 
-            this.mongoDbContext = new MongoDbContextMock(new Mock<IMongoDatabase>());
-            ((MongoDbContextMock)this.mongoDbContext).InitCollection(this.documents);
-            this.basePersistence = new DynamicPersistence<Document>(this.mongoDbContext);
+            MongoDbContext = new MongoDbContextMock(new Mock<IMongoDatabase>());
+            ((MongoDbContextMock)MongoDbContext).InitCollection(Documents);
+            BasePersistence = new DynamicPersistence<Document>(MongoDbContext);
         }
 
         #region AddAsync
         [Test]
         public async Task AddAsyncOk()
         {
-            bool result = await this.basePersistence.AddAsync((Document)this.document);
+            bool result = await BasePersistence.AddAsync((Document)Document);
             Assert.That(result, Is.EqualTo(true));
         }
         #endregion
@@ -43,7 +43,7 @@ namespace Trinity.Test.Persistence
         [Test]
         public async Task UpdateAsyncOk()
         {
-            bool result = await this.basePersistence.UpdateAsync((Document)this.document);
+            bool result = await BasePersistence.UpdateAsync((Document)Document);
             Assert.That(result, Is.EqualTo(true));
         }
         #endregion
@@ -52,7 +52,7 @@ namespace Trinity.Test.Persistence
         [Test]
         public async Task DeleteAsyncOk()
         {
-            bool result = await this.basePersistence.DeleteAsync("any_id");
+            bool result = await BasePersistence.DeleteAsync("any_id");
             Assert.That(result, Is.EqualTo(true));
         }
         #endregion
