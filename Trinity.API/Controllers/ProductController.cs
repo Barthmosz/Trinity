@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 using Trinity.API.Extensions;
 using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Products;
-using Trinity.Application.Exceptions.Products;
+using Trinity.Application.DTOs.Product;
+using Trinity.Application.Exceptions;
 
-namespace Trinity.API.Controllers.Product
+namespace Trinity.API.Controllers
 {
     [ApiController]
     [Route("v1/[Controller]")]
-    public class ProductsController : ControllerBase
+    public class ProductController : ControllerBase
     {
-        private readonly IProductsService ProductService;
+        private readonly IProductService ProductService;
 
-        public ProductsController(IProductsService productService)
+        public ProductController(IProductService productService)
         {
             ProductService = productService;
         }
@@ -27,8 +27,8 @@ namespace Trinity.API.Controllers.Product
         {
             try
             {
-                IEnumerable<ProductsOutput> products = await ProductService.GetAsync();
-                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<IEnumerable<ProductsOutput>>(products));
+                IEnumerable<ProductOutput> products = await ProductService.GetAsync();
+                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<IEnumerable<ProductOutput>>(products));
             }
             catch (Exception ex)
             {
@@ -37,17 +37,17 @@ namespace Trinity.API.Controllers.Product
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] ProductsAddInput product)
+        public async Task<IActionResult> AddAsync([FromBody] ProductAddInput productAddInput)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new ResultViewModel<ProductsOutput>(ModelState.GetErrors()));
+                    return BadRequest(new ResultViewModel<ProductOutput>(ModelState.GetErrors()));
                 }
 
-                ProductsOutput productAdded = await ProductService.AddAsync(product);
-                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<ProductsOutput>(productAdded));
+                ProductOutput productAdded = await ProductService.AddAsync(productAddInput);
+                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<ProductOutput>(productAdded));
             }
             catch (Exception ex)
             {
@@ -56,19 +56,19 @@ namespace Trinity.API.Controllers.Product
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync([FromBody] ProductsUpdateInput productInput, [FromRoute] string id)
+        public async Task<IActionResult> UpdateAsync([FromBody] ProductUpdateInput productUpdateInput, [FromRoute] string id)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new ResultViewModel<ProductsOutput>(ModelState.GetErrors()));
+                    return BadRequest(new ResultViewModel<ProductOutput>(ModelState.GetErrors()));
                 }
 
-                ProductsOutput? productUpdate = await ProductService.UpdateAsync(productInput, id);
-                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productUpdate));
+                ProductOutput? productUpdate = await ProductService.UpdateAsync(productUpdateInput, id);
+                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductOutput?>(productUpdate));
             }
-            catch (ProductsException ex)
+            catch (ProductException ex)
             {
                 return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<string>(ex.Message));
             }
@@ -83,12 +83,12 @@ namespace Trinity.API.Controllers.Product
         {
             try
             {
-                ProductsOutput? productDeleted = await ProductService.DeleteAsync(id);
-                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productDeleted));
+                ProductOutput? productDeleted = await ProductService.DeleteAsync(id);
+                return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductOutput?>(productDeleted));
             }
-            catch (ProductsException ex)
+            catch (ProductException ex)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<ProductsOutput>(ex.Message));
+                return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<ProductOutput>(ex.Message));
             }
             catch (Exception ex)
             {

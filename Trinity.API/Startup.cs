@@ -11,8 +11,7 @@ using Trinity.Application.Contracts;
 using Trinity.Application.Mapping;
 using Trinity.Application.Services;
 using Trinity.Application.Wrappers;
-using Trinity.Domain.Entities.Accounts;
-using Trinity.Domain.Entities.Products;
+using Trinity.Domain.Entities;
 using Trinity.Persistence;
 using Trinity.Persistence.ConnectionConfig;
 using Trinity.Persistence.Contexts;
@@ -71,13 +70,13 @@ namespace Trinity.API
             services.AddScoped<IPasswordHasherWrapper, PasswordHasherWrapper>();
             services.AddScoped<ITokenService, TokenService>();
 
-            services.AddScoped<IStaticPersistence<Products>, StaticPersistence<Products>>();
-            services.AddScoped<IStaticPersistence<Accounts>, StaticPersistence<Accounts>>();
-            services.AddScoped<IDynamicPersistence<Products>, DynamicPersistence<Products>>();
-            services.AddScoped<IDynamicPersistence<Accounts>, DynamicPersistence<Accounts>>();
+            services.AddScoped<IStaticPersistence<Product>, StaticPersistence<Product>>();
+            services.AddScoped<IStaticPersistence<Account>, StaticPersistence<Account>>();
+            services.AddScoped<IDynamicPersistence<Product>, DynamicPersistence<Product>>();
+            services.AddScoped<IDynamicPersistence<Account>, DynamicPersistence<Account>>();
 
-            services.AddScoped<IProductsService, ProductsService>();
-            services.AddScoped<IAccountsService, AccountsService>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IAccountService, AccountService>();
         }
 
         public void Configure(IApplicationBuilder application, IWebHostEnvironment environment)

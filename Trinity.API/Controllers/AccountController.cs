@@ -5,36 +5,36 @@ using System.Threading.Tasks;
 using Trinity.API.Extensions;
 using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Accounts;
-using Trinity.Application.Exceptions.Accounts;
+using Trinity.Application.DTOs.Account;
+using Trinity.Application.Exceptions;
 
-namespace Trinity.API.Controllers.Accounts
+namespace Trinity.API.Controllers
 {
     [ApiController]
     [Route("v1/[Controller]")]
-    public class AccountsController : ControllerBase
+    public class AccountController : ControllerBase
     {
-        private readonly IAccountsService AccountsService;
+        private readonly IAccountService AccountService;
 
-        public AccountsController(IAccountsService accountsService)
+        public AccountController(IAccountService accountService)
         {
-            AccountsService = accountsService;
+            AccountService = accountService;
         }
 
         [HttpPost("signup")]
-        public async Task<IActionResult> SignUp([FromBody] AccountsSignUpInput accountInput)
+        public async Task<IActionResult> SignUp([FromBody] AccountSignUpInput accountSignUpInput)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
+                    return BadRequest(new ResultViewModel<AccountOutput>(ModelState.GetErrors()));
                 }
 
-                AccountsOutput accountCreated = await AccountsService.SignUpAsync(accountInput);
-                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<AccountsOutput>(accountCreated));
+                AccountOutput accountCreated = await AccountService.SignUpAsync(accountSignUpInput);
+                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<AccountOutput>(accountCreated));
             }
-            catch (AccountsException ex)
+            catch (AccountException ex)
             {
                 return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<string>(ex.Message));
             }
@@ -45,19 +45,19 @@ namespace Trinity.API.Controllers.Accounts
         }
 
         [HttpPost("signin")]
-        public async Task<IActionResult> SignIn([FromBody] AccountsSignInInput accountInput)
+        public async Task<IActionResult> SignIn([FromBody] AccountSignInInput accountSignInInput)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
+                    return BadRequest(new ResultViewModel<AccountOutput>(ModelState.GetErrors()));
                 }
 
-                TokenOutput token = await AccountsService.SignInAsync(accountInput);
+                TokenOutput token = await AccountService.SignInAsync(accountSignInInput);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<TokenOutput>(token));
             }
-            catch (AccountsException ex)
+            catch (AccountException ex)
             {
                 return StatusCode((int)HttpStatusCode.BadRequest, new ResultViewModel<string>(ex.Message));
             }

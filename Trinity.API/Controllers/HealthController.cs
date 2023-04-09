@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Trinity.API.Controllers.Health
+namespace Trinity.API.Controllers
 {
     [ApiController]
     [Route("v1/[Controller]")]
