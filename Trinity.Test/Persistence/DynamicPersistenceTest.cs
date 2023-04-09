@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Trinity.Domain.Base;
 using Trinity.Persistence.Contexts;
+using Trinity.Persistence.Contracts;
 using Trinity.Persistence.Persistence;
 using Trinity.Test.Configs.Context;
 
@@ -14,26 +15,26 @@ namespace Trinity.Test.Persistence
     public class DynamicPersistenceTest
     {
         private IMongoDbContext mongoDbContext;
-        private DynamicPersistence<Document> basePersistence;
-        private Document document;
-        private List<Document> documents;
+        private IDynamicPersistence<Document> basePersistence;
+        private IDocument document;
+        private IEnumerable<Document> documents;
 
         [SetUp]
         public void SetUp()
         {
-            this.document = new();
-            this.documents = Enumerable.Repeat(this.document, 500).ToList();
+            this.document = new Document();
+            this.documents = Enumerable.Repeat((Document)this.document, 500).ToList();
 
             this.mongoDbContext = new MongoDbContextMock(new Mock<IMongoDatabase>());
             ((MongoDbContextMock)this.mongoDbContext).InitCollection(this.documents);
-            this.basePersistence = new(this.mongoDbContext);
+            this.basePersistence = new DynamicPersistence<Document>(this.mongoDbContext);
         }
 
         #region AddAsync
         [Test]
         public async Task AddAsyncOk()
         {
-            bool result = await this.basePersistence.AddAsync(this.document);
+            bool result = await this.basePersistence.AddAsync((Document)this.document);
             Assert.That(result, Is.EqualTo(true));
         }
         #endregion
@@ -42,7 +43,7 @@ namespace Trinity.Test.Persistence
         [Test]
         public async Task UpdateAsyncOk()
         {
-            bool result = await this.basePersistence.UpdateAsync(this.document);
+            bool result = await this.basePersistence.UpdateAsync((Document)this.document);
             Assert.That(result, Is.EqualTo(true));
         }
         #endregion
