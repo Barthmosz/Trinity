@@ -9,6 +9,7 @@ using Trinity.Application.Exceptions;
 using Trinity.Application.Services;
 using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
+using Trinity.Test._Factories;
 
 namespace Trinity.Test.Application.Services
 {
@@ -33,44 +34,12 @@ namespace Trinity.Test.Application.Services
         [SetUp]
         public void SetUp()
         {
-            ProductAddInput = new()
-            {
-                Name = "any_name",
-                Description = "any_description",
-                Quantity = 1,
-                ImageUrl = "any_image_url",
-                Price = 10
-            };
-            ProductUpdateInput = new()
-            {
-                Name = "any_name",
-                Description = "any_description",
-                Quantity = 1,
-                Discount = 1,
-                ImageUrl = "any_image_url",
-                Price = 10
-            };
-            Product = new()
-            {
-                Name = "any_name",
-                Description = "any_description",
-                Quantity = 1,
-                Discount = 1,
-                ImageUrl = "any_image_url",
-                Price = 10
-            };
-            Products = new List<Product>() { Product };
-            ProductOutput = new()
-            {
-                Id = "any_id",
-                Name = "any_name",
-                Description = "any_description",
-                Quantity = 1,
-                Price = 10,
-                ImageUrl = "any_image_url",
-                Discount = 1
-            };
+            ProductAddInput = ProductFactory.MakeProductAddInput();
+            ProductUpdateInput = ProductFactory.MakeProductUpdateInput();
+            ProductOutput = ProductFactory.MakeProductOutput();
             ProductsOutput = new List<ProductOutput>() { ProductOutput };
+            Product = ProductFactory.MakeProduct();
+            Products = new List<Product>() { Product };
 
             Mapper.Setup(m => m.Map<IEnumerable<ProductOutput>>(Products)).Returns(ProductsOutput);
             Mapper.Setup(m => m.Map<Product>(ProductAddInput)).Returns(Product);
