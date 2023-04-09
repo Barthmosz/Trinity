@@ -28,5 +28,18 @@ namespace Trinity.Test._Factories
                 Discount = 1
             };
         }
+
+        public static ProductOutput MakeProductOutput()
+        {
+            return new ProductOutput()
+            {
+                Name = "any_name",
+                Description = "any_description",
+                ImageUrl = "any_image_url",
+                Price = 1,
+                Quantity = 1,
+                Discount = 1
+            };
+        }
     }
 }
