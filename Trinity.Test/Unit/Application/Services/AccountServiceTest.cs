@@ -11,7 +11,7 @@ using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
 using Trinity.Test.Factories;
 
-namespace Trinity.Test.Application.Services
+namespace Trinity.Test.Unit.Application.Services
 {
     [TestFixture]
     public class AccountServiceTest

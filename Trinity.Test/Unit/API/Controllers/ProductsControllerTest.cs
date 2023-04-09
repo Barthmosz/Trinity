@@ -14,7 +14,7 @@ using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
 using Trinity.Test._Factories;
 
-namespace Trinity.Test.API.Controllers
+namespace Trinity.Test.Unit.API.Controllers
 {
     [TestFixture]
     public class ProductControllerTest
@@ -32,7 +32,7 @@ namespace Trinity.Test.API.Controllers
         private ProductUpdateInput ProductUpdateInput;
 
         private Product? Product;
-        private IEnumerable<Product> Products;        
+        private IEnumerable<Product> Products;
 
         [SetUp]
         public void SetUp()

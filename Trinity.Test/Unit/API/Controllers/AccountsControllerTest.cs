@@ -14,7 +14,7 @@ using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
 using Trinity.Test.Factories;
 
-namespace Trinity.Test.API.Controllers
+namespace Trinity.Test.Unit.API.Controllers
 {
     [TestFixture]
     public class AccountsControllerTest
