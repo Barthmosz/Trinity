@@ -1,6 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -11,12 +13,20 @@ using Trinity.Domain.Entities.Accounts;
 
 namespace Trinity.Application.Services
 {
+    [ExcludeFromCodeCoverage]
     public class TokenService : ITokenService
     {
+        private readonly IConfiguration configuration;
+
+        public TokenService(IConfiguration configuration)
+        {
+            this.configuration = configuration;
+        }
+
         public TokenOutput GenerateToken(Accounts account)
         {
             JwtSecurityTokenHandler tokenHandler = new();
-            byte[] key = Encoding.ASCII.GetBytes(Configuration.JwtKey);
+            byte[] key = Encoding.ASCII.GetBytes(this.configuration.GetSection("JwtKey").Value!);
             IEnumerable<Claim> claims = account.GetClaims();
             SecurityTokenDescriptor tokenDescriptor = new()
             {

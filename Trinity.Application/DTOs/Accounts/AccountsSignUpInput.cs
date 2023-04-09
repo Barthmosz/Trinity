@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace Trinity.Application.DTOs.Users
+namespace Trinity.Application.DTOs.Accounts
 {
     public class AccountsSignUpInput
     {

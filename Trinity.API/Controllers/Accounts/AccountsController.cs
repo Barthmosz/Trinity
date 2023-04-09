@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using Trinity.API.Extensions;
 using Trinity.API.ViewModels;
 using Trinity.Application.Contracts;
 using Trinity.Application.DTOs.Accounts;
-using Trinity.Application.DTOs.Products;
-using Trinity.Application.DTOs.Users;
 using Trinity.Application.Exceptions.Accounts;
 
 namespace Trinity.API.Controllers.Accounts
@@ -34,8 +31,8 @@ namespace Trinity.API.Controllers.Accounts
                     return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
                 }
 
-                AccountsOutput userCreated = await this.accountsService.SignUpAsync(accountInput);
-                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<AccountsOutput>(userCreated));
+                AccountsOutput accountCreated = await this.accountsService.SignUpAsync(accountInput);
+                return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<AccountsOutput>(accountCreated));
             }
             catch (AccountsException ex)
             {

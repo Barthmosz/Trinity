@@ -1,4 +1,4 @@
-﻿namespace Trinity.Application.DTOs.Users
+﻿namespace Trinity.Application.DTOs.Accounts
 {
     public class AccountsOutput
     {

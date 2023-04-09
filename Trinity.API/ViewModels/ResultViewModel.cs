@@ -4,12 +4,6 @@ namespace Trinity.API.ViewModels
 {
     public class ResultViewModel<T>
     {
-        public ResultViewModel(T data, List<string> errors)
-        {
-            this.Data = data;
-            this.Errors = errors;
-        }
-
         public ResultViewModel(T data)
         {
             this.Data = data;

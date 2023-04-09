@@ -5,6 +5,6 @@ namespace Trinity.Application.Contracts
 {
     public interface ITokenService
     {
-        TokenOutput GenerateToken(Accounts user);
+        TokenOutput GenerateToken(Accounts account);
     }
 }

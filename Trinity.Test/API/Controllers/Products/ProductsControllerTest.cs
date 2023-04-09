@@ -137,6 +137,16 @@ namespace Trinity.Test.API.Controllers.Product
         }
 
         [Test]
+        public async Task UpdateAsync_Should_Return_BadRequest_If_Product_Does_Not_Exists()
+        {
+            this.product = null;
+            this.productsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(this.product));
+
+            ObjectResult? result = await this.productsController.UpdateAsync(this.productsUpdateInput, productId) as ObjectResult;
+            Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
+        }
+
+        [Test]
         public async Task UpdateAsync_Should_Return_InternalServerError_If_Persistence_Throws()
         {
             this.productsBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Products>())).Throws(new Exception());

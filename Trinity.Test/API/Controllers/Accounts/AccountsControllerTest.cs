@@ -2,13 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
-using SecureIdentity.Password;
 using System;
 using System.Net;
 using System.Threading.Tasks;
 using Trinity.API.Controllers.Accounts;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Users;
+using Trinity.Application.DTOs.Accounts;
 using Trinity.Application.Services;
 using Trinity.Application.Wrappers;
 using Trinity.Domain.Entities.Accounts;
@@ -138,7 +137,7 @@ namespace Trinity.Test.API.Controllers.Account
         [Test]
         public async Task SignIn_Should_Return_BadRequest_If_Password_Is_Not_Correct()
         {
-            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.accountExists));
+            this.accountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).Returns(Task.FromResult(this.accountExists)!);
             this.passwordHasher.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(false);
             ObjectResult? result = await this.accountsController.SignIn(this.accountsSignInInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));

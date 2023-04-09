@@ -17,7 +17,7 @@ namespace Trinity.Persistence.Persistence
 
         public async Task<bool> UpdateAsync(D entity)
         {
-            string id = entity.GetType().GetProperty("Id")?.GetValue(entity)?.ToString() ?? string.Empty;
+            string id = entity.GetType().GetProperty("Id")!.GetValue(entity)!.ToString()!;
             FilterDefinition<D> filter = Builders<D>.Filter.Eq("_id", id);
             ReplaceOneResult result = await this.MongoCollection.ReplaceOneAsync(filter, entity);
             return result.ModifiedCount > 0;

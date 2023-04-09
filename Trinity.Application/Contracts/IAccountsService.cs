@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Trinity.Application.DTOs.Accounts;
-using Trinity.Application.DTOs.Users;
 
 namespace Trinity.Application.Contracts
 {
     public interface IAccountsService
     {
-        Task<AccountsOutput> SignUpAsync(AccountsSignUpInput user);
-        Task<TokenOutput> SignInAsync(AccountsSignInInput user);
+        Task<AccountsOutput> SignUpAsync(AccountsSignUpInput accountSignUpInput);
+        Task<TokenOutput> SignInAsync(AccountsSignInInput accountSignInInput);
     }
 }
