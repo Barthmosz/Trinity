@@ -2,9 +2,9 @@
 using MongoDB.Bson.Serialization.Attributes;
 using Trinity.Domain.Base;
 
-namespace Trinity.Domain.Entities.Products
+namespace Trinity.Domain.Entities
 {
-    public class Products : Document
+    public class Product : Document
     {
         [BsonRequired]
         [BsonRepresentation(BsonType.String)]

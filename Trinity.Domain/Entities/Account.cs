@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Trinity.Domain.Base;
 
-namespace Trinity.Domain.Entities.Accounts
+namespace Trinity.Domain.Entities
 {
-    public class Accounts : Document
+    public class Account : Document
     {
         public string Name { get; set; } = string.Empty;
 
