@@ -12,8 +12,9 @@ using Trinity.Application.DTOs.Product;
 using Trinity.Application.Services;
 using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
+using Trinity.Test._Factories;
 
-namespace Trinity.Test.API.Controllers
+namespace Trinity.Test.Unit.API.Controllers
 {
     [TestFixture]
     public class ProductControllerTest
@@ -31,37 +32,14 @@ namespace Trinity.Test.API.Controllers
         private ProductUpdateInput ProductUpdateInput;
 
         private Product? Product;
-        private IEnumerable<Product> Products;        
+        private IEnumerable<Product> Products;
 
         [SetUp]
         public void SetUp()
         {
-            ProductAddInput = new()
-            {
-                Name = "any_name",
-                Description = "any_description",
-                ImageUrl = "any_image_url",
-                Price = 1,
-                Quantity = 1
-            };
-            ProductUpdateInput = new()
-            {
-                Name = "any_name",
-                Description = "any_description",
-                ImageUrl = "any_image_url",
-                Price = 1,
-                Quantity = 1,
-                Discount = 0.5m
-            };
-            Product = new()
-            {
-                Name = "any_name",
-                Description = "any_description",
-                ImageUrl = "any_image_url",
-                Price = 1,
-                Quantity = 1,
-                Discount = 1
-            };
+            ProductAddInput = ProductFactory.MakeProductAddInput();
+            ProductUpdateInput = ProductFactory.MakeProductUpdateInput();
+            Product = ProductFactory.MakeProduct();
             Products = new List<Product>()
             {
                 Product

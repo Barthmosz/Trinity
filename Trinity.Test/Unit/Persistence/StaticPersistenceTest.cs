@@ -10,7 +10,7 @@ using Trinity.Persistence.Contracts;
 using Trinity.Persistence.Persistence;
 using Trinity.Test.Configs.Context;
 
-namespace Trinity.Test.Persistence
+namespace Trinity.Test.Unit.Persistence
 {
     public class StaticPersistenceTest
     {

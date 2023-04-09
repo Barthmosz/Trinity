@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Trinity.API.Controllers;
 
-namespace Trinity.Test.API.Controllers
+namespace Trinity.Test.Unit.API.Controllers
 {
     [TestFixture]
     public class HealthControllerTest
