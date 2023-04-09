@@ -6,36 +6,37 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using Trinity.API.Controllers.Product;
+using Trinity.API.Controllers;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Products;
+using Trinity.Application.DTOs.Product;
 using Trinity.Application.Services;
-using Trinity.Domain.Entities.Products;
+using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
 
-namespace Trinity.Test.API.Controllers.Product
+namespace Trinity.Test.API.Controllers
 {
-    public class ProductsControllerTest
+    [TestFixture]
+    public class ProductControllerTest
     {
         private const string ProductId = "any_id";
 
-        private readonly Mock<IStaticPersistence<Products>> ProductsStaticPersistence = new();
-        private readonly Mock<IDynamicPersistence<Products>> ProductsBasePersistence = new();
+        private readonly Mock<IStaticPersistence<Product>> ProductStaticPersistence = new();
+        private readonly Mock<IDynamicPersistence<Product>> ProductBasePersistence = new();
         private readonly Mock<IMapper> Mapper = new();
 
-        private ProductsController ProductsController;
-        private IProductsService ProductsService;
+        private ProductController ProductController;
+        private IProductService ProductService;
 
-        private Products? Product;
-        private IEnumerable<Products> Products;
+        private ProductAddInput ProductAddInput;
+        private ProductUpdateInput ProductUpdateInput;
 
-        private ProductsAddInput ProductsAddInput;
-        private ProductsUpdateInput ProductsUpdateInput;
+        private Product? Product;
+        private IEnumerable<Product> Products;        
 
         [SetUp]
         public void SetUp()
         {
-            ProductsAddInput = new()
+            ProductAddInput = new()
             {
                 Name = "any_name",
                 Description = "any_description",
@@ -43,7 +44,7 @@ namespace Trinity.Test.API.Controllers.Product
                 Price = 1,
                 Quantity = 1
             };
-            ProductsUpdateInput = new()
+            ProductUpdateInput = new()
             {
                 Name = "any_name",
                 Description = "any_description",
@@ -61,35 +62,35 @@ namespace Trinity.Test.API.Controllers.Product
                 Quantity = 1,
                 Discount = 1
             };
-            Products = new List<Products>()
+            Products = new List<Product>()
             {
                 Product
             };
 
-            ProductsStaticPersistence.Setup(p => p.GetAllAsync()).Returns(Task.FromResult(Products));
-            ProductsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product)!);
-            ProductsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Products>())).Returns(Task.FromResult(true));
-            ProductsBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Products>())).Returns(Task.FromResult(true));
-            ProductsBasePersistence.Setup(p => p.DeleteAsync(It.IsAny<string>())).Returns(Task.FromResult(true));
+            ProductStaticPersistence.Setup(p => p.GetAllAsync()).Returns(Task.FromResult(Products));
+            ProductStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product)!);
+            ProductBasePersistence.Setup(p => p.AddAsync(It.IsAny<Product>())).Returns(Task.FromResult(true));
+            ProductBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Product>())).Returns(Task.FromResult(true));
+            ProductBasePersistence.Setup(p => p.DeleteAsync(It.IsAny<string>())).Returns(Task.FromResult(true));
 
-            ProductsService = new ProductsService(ProductsStaticPersistence.Object, ProductsBasePersistence.Object, Mapper.Object);
-            ProductsController = new(ProductsService);
+            ProductService = new ProductService(ProductStaticPersistence.Object, ProductBasePersistence.Object, Mapper.Object);
+            ProductController = new(ProductService);
         }
 
         #region GetAsync
         [Test]
         public async Task GetAsync_Should_Return_Ok_If_Persistence_Returns_Products()
         {
-            ObjectResult? result = await ProductsController.GetAsync() as ObjectResult;
+            ObjectResult? result = await ProductController.GetAsync() as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 
         [Test]
         public async Task GetAsync_Should_Return_InternalServerError_If_Persistence_Throws()
         {
-            ProductsStaticPersistence.Setup(p => p.GetAllAsync()).Throws(new Exception());
+            ProductStaticPersistence.Setup(p => p.GetAllAsync()).Throws(new Exception());
 
-            ObjectResult? result = await ProductsController.GetAsync() as ObjectResult;
+            ObjectResult? result = await ProductController.GetAsync() as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion
@@ -98,24 +99,24 @@ namespace Trinity.Test.API.Controllers.Product
         [Test]
         public async Task AddAsync_Should_Return_BadRequest_If_Input_Is_Invalid()
         {
-            ProductsController.ModelState.AddModelError("name", "Name is required.");
-            ObjectResult? result = await ProductsController.AddAsync(ProductsAddInput) as ObjectResult;
+            ProductController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await ProductController.AddAsync(ProductAddInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task AddAsync_Should_Return_Created_If_Persistence_Returns_True()
         {
-            ObjectResult? result = await ProductsController.AddAsync(ProductsAddInput) as ObjectResult;
+            ObjectResult? result = await ProductController.AddAsync(ProductAddInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.Created));
         }
 
         [Test]
         public async Task AddAsync_Should_Return_InternalServerError_If_Persistence_Throws()
         {
-            ProductsBasePersistence.Setup(p => p.AddAsync(It.IsAny<Products>())).Throws(new Exception());
+            ProductBasePersistence.Setup(p => p.AddAsync(It.IsAny<Product>())).Throws(new Exception());
 
-            ObjectResult? result = await ProductsController.AddAsync(ProductsAddInput) as ObjectResult;
+            ObjectResult? result = await ProductController.AddAsync(ProductAddInput) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion
@@ -124,15 +125,15 @@ namespace Trinity.Test.API.Controllers.Product
         [Test]
         public async Task UpdateAsync_Should_Return_BadRequest_If_Input_Is_Invalid()
         {
-            ProductsController.ModelState.AddModelError("name", "Name is required.");
-            ObjectResult? result = await ProductsController.UpdateAsync(ProductsUpdateInput, ProductId) as ObjectResult;
+            ProductController.ModelState.AddModelError("name", "Name is required.");
+            ObjectResult? result = await ProductController.UpdateAsync(ProductUpdateInput, ProductId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task UpdateAsync_Should_Return_Ok_If_Persistence_Returns_True()
         {
-            ObjectResult? result = await ProductsController.UpdateAsync(ProductsUpdateInput, ProductId) as ObjectResult;
+            ObjectResult? result = await ProductController.UpdateAsync(ProductUpdateInput, ProductId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 
@@ -140,18 +141,18 @@ namespace Trinity.Test.API.Controllers.Product
         public async Task UpdateAsync_Should_Return_BadRequest_If_Product_Does_Not_Exists()
         {
             Product = null;
-            ProductsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
+            ProductStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
 
-            ObjectResult? result = await ProductsController.UpdateAsync(ProductsUpdateInput, ProductId) as ObjectResult;
+            ObjectResult? result = await ProductController.UpdateAsync(ProductUpdateInput, ProductId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task UpdateAsync_Should_Return_InternalServerError_If_Persistence_Throws()
         {
-            ProductsBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Products>())).Throws(new Exception());
+            ProductBasePersistence.Setup(p => p.UpdateAsync(It.IsAny<Product>())).Throws(new Exception());
 
-            ObjectResult? result = await ProductsController.UpdateAsync(ProductsUpdateInput, ProductId) as ObjectResult;
+            ObjectResult? result = await ProductController.UpdateAsync(ProductUpdateInput, ProductId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion
@@ -161,25 +162,25 @@ namespace Trinity.Test.API.Controllers.Product
         public async Task DeleteAsync_Should_Return_BadRequest_If_Product_Does_Not_Exists()
         {
             Product = null;
-            ProductsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
+            ProductStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
 
-            ObjectResult? result = await ProductsController.DeleteAsync(ProductId) as ObjectResult;
+            ObjectResult? result = await ProductController.DeleteAsync(ProductId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.BadRequest));
         }
 
         [Test]
         public async Task DeleteAsync_Should_Return_Ok_If_Persistence_Returns_True()
         {
-            ObjectResult? result = await ProductsController.DeleteAsync(ProductId) as ObjectResult;
+            ObjectResult? result = await ProductController.DeleteAsync(ProductId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.OK));
         }
 
         [Test]
         public async Task DeleteAsync_Should_Return_InternalServerError_If_Persistence_Throws()
         {
-            ProductsBasePersistence.Setup(p => p.DeleteAsync(It.IsAny<string>())).Throws(new Exception());
+            ProductBasePersistence.Setup(p => p.DeleteAsync(It.IsAny<string>())).Throws(new Exception());
 
-            ObjectResult? result = await ProductsController.DeleteAsync(ProductId) as ObjectResult;
+            ObjectResult? result = await ProductController.DeleteAsync(ProductId) as ObjectResult;
             Assert.That(result!.StatusCode, Is.EqualTo((int)HttpStatusCode.InternalServerError));
         }
         #endregion

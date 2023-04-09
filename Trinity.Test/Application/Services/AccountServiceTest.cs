@@ -3,30 +3,32 @@ using Moq;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Accounts;
-using Trinity.Application.Exceptions.Accounts;
+using Trinity.Application.DTOs.Account;
+using Trinity.Application.Exceptions;
 using Trinity.Application.Services;
 using Trinity.Application.Wrappers;
-using Trinity.Domain.Entities.Accounts;
+using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
 
-namespace Trinity.Test.Application.Services.Account
+namespace Trinity.Test.Application.Services
 {
-    public class AccountsServiceTest
+    [TestFixture]
+    public class AccountServiceTest
     {
-        private readonly Mock<IStaticPersistence<Accounts>> AccountsStaticPersistence = new();
-        private readonly Mock<IDynamicPersistence<Accounts>> AccountsBasePersistence = new();
+        private readonly Mock<IStaticPersistence<Account>> AccountStaticPersistence = new();
+        private readonly Mock<IDynamicPersistence<Account>> AccountBasePersistence = new();
         private readonly Mock<IPasswordHasherWrapper> PasswordHasherWrapper = new();
         private readonly Mock<ITokenService> TokenService = new();
         private readonly Mock<IMapper> Mapper = new();
 
-        private IAccountsService AccountsService;
+        private IAccountService AccountService;
 
-        private AccountsSignUpInput AccountSignUpInput;
-        private AccountsSignInInput AccountSignInInput;
-        private Accounts? Account;
-        private AccountsOutput AccountOutput;
+        private AccountSignUpInput AccountSignUpInput;
+        private AccountSignInInput AccountSignInInput;
+        private AccountOutput AccountOutput;
         private TokenOutput TokenOutput;
+
+        private Account? Account;
 
         [SetUp]
         public void SetUp()
@@ -59,31 +61,31 @@ namespace Trinity.Test.Application.Services.Account
                 Token = "any_token"
             };
 
-            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
-            Mapper.Setup(m => m.Map<Accounts>(AccountSignUpInput)).Returns(Account);
-            Mapper.Setup(m => m.Map<AccountsOutput>(Account)).Returns(AccountOutput);
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
+            Mapper.Setup(m => m.Map<Account>(AccountSignUpInput)).Returns(Account);
+            Mapper.Setup(m => m.Map<AccountOutput>(Account)).Returns(AccountOutput);
             TokenService.Setup(t => t.GenerateToken(Account)).Returns(TokenOutput);
             PasswordHasherWrapper.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(true);
 
-            AccountsService = new AccountsService(AccountsStaticPersistence.Object, AccountsBasePersistence.Object, PasswordHasherWrapper.Object, TokenService.Object, Mapper.Object);
+            AccountService = new AccountService(AccountStaticPersistence.Object, AccountBasePersistence.Object, PasswordHasherWrapper.Object, TokenService.Object, Mapper.Object);
         }
 
         #region SignUp
         [Test]
         public void SignUpAsync_Should_Throw_If_Email_Already_Exists()
         {
-            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
 
-            Assert.ThrowsAsync<AccountsException>(async () => await AccountsService.SignUpAsync(AccountSignUpInput));
+            Assert.ThrowsAsync<AccountException>(async () => await AccountService.SignUpAsync(AccountSignUpInput));
         }
 
         [Test]
         public async Task SignUpAsync_Should_Return_Created_Account()
         {
             Account = null;
-            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
 
-            AccountsOutput result = await AccountsService.SignUpAsync(AccountSignUpInput);
+            AccountOutput result = await AccountService.SignUpAsync(AccountSignUpInput);
             Assert.That(result, Is.EqualTo(AccountOutput));
         }
         #endregion
@@ -93,9 +95,9 @@ namespace Trinity.Test.Application.Services.Account
         public void SignInAsync_Should_Throw_If_Email_Does_Not_Exists()
         {
             Account = null;
-            AccountsStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
+            AccountStaticPersistence.Setup(p => p.GetByEmailAsync(It.IsAny<string>())).ReturnsAsync(Account);
 
-            Assert.ThrowsAsync<AccountsException>(async () => await AccountsService.SignInAsync(AccountSignInInput));
+            Assert.ThrowsAsync<AccountException>(async () => await AccountService.SignInAsync(AccountSignInInput));
         }
 
         [Test]
@@ -103,13 +105,13 @@ namespace Trinity.Test.Application.Services.Account
         {
             PasswordHasherWrapper.Setup(p => p.Verify(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<short>(), It.IsAny<int>(), It.IsAny<char>(), It.IsAny<string>())).Returns(false);
 
-            Assert.ThrowsAsync<AccountsException>(async () => await AccountsService.SignInAsync(AccountSignInInput));
+            Assert.ThrowsAsync<AccountException>(async () => await AccountService.SignInAsync(AccountSignInInput));
         }
 
         [Test]
         public async Task SignInAsync_Should_Return_Token_If_Email_And_Password_Are_Correct()
         {
-            TokenOutput result = await AccountsService.SignInAsync(AccountSignInInput);
+            TokenOutput result = await AccountService.SignInAsync(AccountSignInInput);
             Assert.That(result, Is.EqualTo(TokenOutput));
         }
         #endregion

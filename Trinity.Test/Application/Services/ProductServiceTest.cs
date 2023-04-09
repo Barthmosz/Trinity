@@ -4,31 +4,31 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Trinity.Application.Contracts;
-using Trinity.Application.DTOs.Products;
-using Trinity.Application.Exceptions.Products;
+using Trinity.Application.DTOs.Product;
+using Trinity.Application.Exceptions;
 using Trinity.Application.Services;
-using Trinity.Domain.Entities.Products;
+using Trinity.Domain.Entities;
 using Trinity.Persistence.Contracts;
 
-namespace Trinity.Test.Application.Services.Product
+namespace Trinity.Test.Application.Services
 {
-    public class ProductsServiceTest
+    public class ProductServiceTest
     {
         private const string ProductId = "any_id";
 
-        private readonly Mock<IStaticPersistence<Products>> ProductsStaticPersistence = new();
-        private readonly Mock<IDynamicPersistence<Products>> ProductsBasePersistence = new();
+        private readonly Mock<IStaticPersistence<Product>> ProductStaticPersistence = new();
+        private readonly Mock<IDynamicPersistence<Product>> ProductBasePersistence = new();
         private readonly Mock<IMapper> Mapper = new();
 
-        private IProductsService ProductsService;
+        private IProductService ProductService;
 
-        private ProductsAddInput ProductAddInput;
-        private ProductsUpdateInput ProductUpdateInput;
-        private ProductsOutput ProductOutput;
-        private IEnumerable<ProductsOutput> ProductsOutput;
+        private ProductAddInput ProductAddInput;
+        private ProductUpdateInput ProductUpdateInput;
+        private ProductOutput ProductOutput;
+        private IEnumerable<ProductOutput> ProductsOutput;
 
-        private Products? Product;
-        private IEnumerable<Products> Products;
+        private Product? Product;
+        private IEnumerable<Product> Products;
 
         [SetUp]
         public void SetUp()
@@ -59,7 +59,7 @@ namespace Trinity.Test.Application.Services.Product
                 ImageUrl = "any_image_url",
                 Price = 10
             };
-            Products = new List<Products>() { Product };
+            Products = new List<Product>() { Product };
             ProductOutput = new()
             {
                 Id = "any_id",
@@ -70,23 +70,23 @@ namespace Trinity.Test.Application.Services.Product
                 ImageUrl = "any_image_url",
                 Discount = 1
             };
-            ProductsOutput = new List<ProductsOutput>() { ProductOutput };
+            ProductsOutput = new List<ProductOutput>() { ProductOutput };
 
-            Mapper.Setup(m => m.Map<IEnumerable<ProductsOutput>>(Products)).Returns(ProductsOutput);
-            Mapper.Setup(m => m.Map<Products>(ProductAddInput)).Returns(Product);
-            Mapper.Setup(m => m.Map<ProductsOutput>(Product)).Returns(ProductOutput);
+            Mapper.Setup(m => m.Map<IEnumerable<ProductOutput>>(Products)).Returns(ProductsOutput);
+            Mapper.Setup(m => m.Map<Product>(ProductAddInput)).Returns(Product);
+            Mapper.Setup(m => m.Map<ProductOutput>(Product)).Returns(ProductOutput);
 
-            ProductsStaticPersistence.Setup(p => p.GetAllAsync()).Returns(Task.FromResult(Products));
-            ProductsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product)!);
+            ProductStaticPersistence.Setup(p => p.GetAllAsync()).Returns(Task.FromResult(Products));
+            ProductStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product)!);
 
-            ProductsService = new ProductsService(ProductsStaticPersistence.Object, ProductsBasePersistence.Object, Mapper.Object);
+            ProductService = new ProductService(ProductStaticPersistence.Object, ProductBasePersistence.Object, Mapper.Object);
         }
 
         #region GetAsync
         [Test]
         public async Task GetAsync_Returns_All_Products()
         {
-            IEnumerable<ProductsOutput> result = await ProductsService.GetAsync();
+            IEnumerable<ProductOutput> result = await ProductService.GetAsync();
             Assert.That(result, Is.EqualTo(ProductsOutput));
         }
         #endregion
@@ -95,7 +95,7 @@ namespace Trinity.Test.Application.Services.Product
         [Test]
         public async Task AddAsync_Returns_Created_Product()
         {
-            ProductsOutput result = await ProductsService.AddAsync(ProductAddInput);
+            ProductOutput result = await ProductService.AddAsync(ProductAddInput);
             Assert.That(result, Is.EqualTo(ProductOutput));
         }
         #endregion
@@ -105,15 +105,15 @@ namespace Trinity.Test.Application.Services.Product
         public void UpdateAsync_Throws_If_Product_Does_Not_Exists()
         {
             Product = null;
-            ProductsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
+            ProductStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
 
-            Assert.ThrowsAsync<ProductsException>(async () => await ProductsService.UpdateAsync(ProductUpdateInput, ProductId));
+            Assert.ThrowsAsync<ProductException>(async () => await ProductService.UpdateAsync(ProductUpdateInput, ProductId));
         }
 
         [Test]
         public async Task UpdateAsync_Returns_Updated_Product()
         {
-            ProductsOutput? result = await ProductsService.UpdateAsync(ProductUpdateInput, ProductId);
+            ProductOutput? result = await ProductService.UpdateAsync(ProductUpdateInput, ProductId);
             Assert.That(result, Is.EqualTo(ProductOutput));
         }
         #endregion
@@ -123,15 +123,15 @@ namespace Trinity.Test.Application.Services.Product
         public void DeleteAsync_Throws_If_Product_Does_Not_Exists()
         {
             Product = null;
-            ProductsStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
+            ProductStaticPersistence.Setup(p => p.GetByIdAsync(It.IsAny<string>())).Returns(Task.FromResult(Product));
 
-            Assert.ThrowsAsync<ProductsException>(async () => await ProductsService.DeleteAsync(ProductId));
+            Assert.ThrowsAsync<ProductException>(async () => await ProductService.DeleteAsync(ProductId));
         }
 
         [Test]
         public async Task DeleteAsync_Returns_Deleted_Product()
         {
-            ProductsOutput? result = await ProductsService.DeleteAsync(ProductId);
+            ProductOutput? result = await ProductService.DeleteAsync(ProductId);
             Assert.That(result, Is.EqualTo(ProductOutput));
         }
         #endregion
