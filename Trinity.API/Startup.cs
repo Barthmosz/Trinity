@@ -73,8 +73,8 @@ namespace Trinity.API
 
             services.AddScoped<IStaticPersistence<Products>, StaticPersistence<Products>>();
             services.AddScoped<IStaticPersistence<Accounts>, StaticPersistence<Accounts>>();
-            services.AddScoped<IBasePersistence<Products>, BasePersistence<Products>>();
-            services.AddScoped<IBasePersistence<Accounts>, BasePersistence<Accounts>>();
+            services.AddScoped<IDynamicPersistence<Products>, DynamicPersistence<Products>>();
+            services.AddScoped<IDynamicPersistence<Accounts>, DynamicPersistence<Accounts>>();
 
             services.AddScoped<IProductsService, ProductsService>();
             services.AddScoped<IAccountsService, AccountsService>();

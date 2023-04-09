@@ -14,7 +14,7 @@ namespace Trinity.Test.Persistence
     public class BasePersistenceTest
     {
         private IMongoDbContext mongoDbContext;
-        private BasePersistence<Document> basePersistence;
+        private DynamicPersistence<Document> basePersistence;
         private Document document;
         private List<Document> documents;
 

@@ -12,12 +12,12 @@ namespace Trinity.Application.Services
     public class ProductsService : IProductsService
     {
         private readonly IStaticPersistence<Products> productStaticPersistence;
-        private readonly IBasePersistence<Products> productsBasePersistence;
+        private readonly IDynamicPersistence<Products> productsBasePersistence;
         private readonly IMapper mapper;
 
         public ProductsService(
             IStaticPersistence<Products> productStaticPersistence,
-            IBasePersistence<Products> productsBasePersistence,
+            IDynamicPersistence<Products> productsBasePersistence,
             IMapper mapper)
         {
             this.productStaticPersistence = productStaticPersistence;

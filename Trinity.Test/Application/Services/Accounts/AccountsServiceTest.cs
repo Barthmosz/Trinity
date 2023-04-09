@@ -15,7 +15,7 @@ namespace Trinity.Test.Application.Services.Account
     public class AccountsServiceTest
     {
         private readonly Mock<IStaticPersistence<Accounts>> accountsStaticPersistence = new();
-        private readonly Mock<IBasePersistence<Accounts>> accountsBasePersistence = new();
+        private readonly Mock<IDynamicPersistence<Accounts>> accountsBasePersistence = new();
         private readonly Mock<IPasswordHasherWrapper> passwordHasher = new();
         private readonly Mock<ITokenService> tokenService = new();
         private readonly Mock<IMapper> mapper = new();

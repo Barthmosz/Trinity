@@ -17,7 +17,7 @@ namespace Trinity.Test.Application.Services.Product
         private const string productId = "any_id";
 
         private readonly Mock<IStaticPersistence<Products>> productsStaticPersistence = new();
-        private readonly Mock<IBasePersistence<Products>> productsBasePersistence = new();
+        private readonly Mock<IDynamicPersistence<Products>> productsBasePersistence = new();
         private readonly Mock<ITokenService> tokenService = new();
         private readonly Mock<IMapper> mapper = new();
 

@@ -13,14 +13,14 @@ namespace Trinity.Application.Services
     public class AccountsService : IAccountsService
     {
         private readonly IStaticPersistence<Accounts> accountsStaticPersistence;
-        private readonly IBasePersistence<Accounts> accountsBasePersistence;
+        private readonly IDynamicPersistence<Accounts> accountsBasePersistence;
         private readonly IPasswordHasherWrapper passwordHasher;
         private readonly ITokenService tokenService;
         private readonly IMapper mapper;
 
         public AccountsService(
             IStaticPersistence<Accounts> accountsStaticPersistence,
-            IBasePersistence<Accounts> accountsBasePersistence,
+            IDynamicPersistence<Accounts> accountsBasePersistence,
             IPasswordHasherWrapper passwordHasher,
             ITokenService tokenService,
             IMapper mapper)
