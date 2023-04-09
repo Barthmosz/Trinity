@@ -11,7 +11,7 @@ using Trinity.Test.Configs.Context;
 
 namespace Trinity.Test.Persistence
 {
-    public class BasePersistenceTest
+    public class DynamicPersistenceTest
     {
         private IMongoDbContext mongoDbContext;
         private DynamicPersistence<Document> basePersistence;
@@ -29,25 +29,31 @@ namespace Trinity.Test.Persistence
             this.basePersistence = new(this.mongoDbContext);
         }
 
+        #region AddAsync
         [Test]
         public async Task AddAsyncOk()
         {
             bool result = await this.basePersistence.AddAsync(this.document);
             Assert.That(result, Is.EqualTo(true));
         }
+        #endregion
 
+        #region UpdateAsync
         [Test]
         public async Task UpdateAsyncOk()
         {
             bool result = await this.basePersistence.UpdateAsync(this.document);
             Assert.That(result, Is.EqualTo(true));
         }
+        #endregion
 
+        #region DeleteAsync
         [Test]
         public async Task DeleteAsyncOk()
         {
             bool result = await this.basePersistence.DeleteAsync("any_id");
             Assert.That(result, Is.EqualTo(true));
         }
+        #endregion
     }
 }
