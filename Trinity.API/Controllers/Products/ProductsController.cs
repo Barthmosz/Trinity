@@ -15,11 +15,11 @@ namespace Trinity.API.Controllers.Product
     [Route("v1/[Controller]")]
     public class ProductsController : ControllerBase
     {
-        private readonly IProductsService productService;
+        private readonly IProductsService ProductService;
 
         public ProductsController(IProductsService productService)
         {
-            this.productService = productService;
+            ProductService = productService;
         }
 
         [HttpGet]
@@ -27,7 +27,7 @@ namespace Trinity.API.Controllers.Product
         {
             try
             {
-                IEnumerable<ProductsOutput> products = await this.productService.GetAsync();
+                IEnumerable<ProductsOutput> products = await ProductService.GetAsync();
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<IEnumerable<ProductsOutput>>(products));
             }
             catch (Exception ex)
@@ -46,7 +46,7 @@ namespace Trinity.API.Controllers.Product
                     return BadRequest(new ResultViewModel<ProductsOutput>(ModelState.GetErrors()));
                 }
 
-                ProductsOutput productAdded = await this.productService.AddAsync(product);
+                ProductsOutput productAdded = await ProductService.AddAsync(product);
                 return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<ProductsOutput>(productAdded));
             }
             catch (Exception ex)
@@ -65,7 +65,7 @@ namespace Trinity.API.Controllers.Product
                     return BadRequest(new ResultViewModel<ProductsOutput>(ModelState.GetErrors()));
                 }
 
-                ProductsOutput? productUpdate = await this.productService.UpdateAsync(productInput, id);
+                ProductsOutput? productUpdate = await ProductService.UpdateAsync(productInput, id);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productUpdate));
             }
             catch (ProductsException ex)
@@ -83,7 +83,7 @@ namespace Trinity.API.Controllers.Product
         {
             try
             {
-                ProductsOutput? productDeleted = await this.productService.DeleteAsync(id);
+                ProductsOutput? productDeleted = await ProductService.DeleteAsync(id);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<ProductsOutput?>(productDeleted));
             }
             catch (ProductsException ex)

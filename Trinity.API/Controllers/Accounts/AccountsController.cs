@@ -14,11 +14,11 @@ namespace Trinity.API.Controllers.Accounts
     [Route("v1/[Controller]")]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountsService accountsService;
+        private readonly IAccountsService AccountsService;
 
         public AccountsController(IAccountsService accountsService)
         {
-            this.accountsService = accountsService;
+            AccountsService = accountsService;
         }
 
         [HttpPost("signup")]
@@ -31,7 +31,7 @@ namespace Trinity.API.Controllers.Accounts
                     return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
                 }
 
-                AccountsOutput accountCreated = await this.accountsService.SignUpAsync(accountInput);
+                AccountsOutput accountCreated = await AccountsService.SignUpAsync(accountInput);
                 return StatusCode((int)HttpStatusCode.Created, new ResultViewModel<AccountsOutput>(accountCreated));
             }
             catch (AccountsException ex)
@@ -54,7 +54,7 @@ namespace Trinity.API.Controllers.Accounts
                     return BadRequest(new ResultViewModel<AccountsOutput>(ModelState.GetErrors()));
                 }
 
-                TokenOutput token = await this.accountsService.SignInAsync(accountInput);
+                TokenOutput token = await AccountsService.SignInAsync(accountInput);
                 return StatusCode((int)HttpStatusCode.OK, new ResultViewModel<TokenOutput>(token));
             }
             catch (AccountsException ex)

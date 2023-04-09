@@ -6,17 +6,17 @@ namespace Trinity.API.ViewModels
     {
         public ResultViewModel(T data)
         {
-            this.Data = data;
+            Data = data;
         }
 
         public ResultViewModel(List<string> errors)
         {
-            this.Errors = errors;
+            Errors = errors;
         }
 
         public ResultViewModel(string error)
         {
-            this.Errors.Add(error);
+            Errors.Add(error);
         }
 
         public T? Data { get; private set; }
