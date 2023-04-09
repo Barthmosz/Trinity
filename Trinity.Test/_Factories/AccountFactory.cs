@@ -1,4 +1,6 @@
-﻿using Trinity.Application.DTOs.Account;
+﻿using System.Collections.Generic;
+using Trinity.Application.DTOs.Account;
+using Trinity.Domain.Entities;
 
 namespace Trinity.Test.Factories
 {
@@ -21,6 +23,21 @@ namespace Trinity.Test.Factories
                 Email = "any_email@mail.com",
                 Password = "any_password"
             };
+        }
+
+        public static Account MakeAccount()
+        {
+            return new Account()
+            {
+                Name = "any_name",
+                Email = "any_email@mail.com",
+                PasswordHash = "any_password_hash",
+                Roles = new List<string>()
+                {
+                    "user"
+                }
+            };
+
         }
     }
 }
