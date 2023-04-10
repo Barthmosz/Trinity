@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -36,6 +37,7 @@ namespace Trinity.API.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> AddAsync([FromBody] ProductAddInput productAddInput)
         {
@@ -55,6 +57,7 @@ namespace Trinity.API.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync([FromBody] ProductUpdateInput productUpdateInput, [FromRoute] string id)
         {
@@ -78,6 +81,7 @@ namespace Trinity.API.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string id)
         {
