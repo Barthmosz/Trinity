@@ -20,13 +20,13 @@ namespace Trinity.Application.DTOs.Product
 
         [JsonPropertyName("quantity")]
         [Required(ErrorMessage = "Quantity is required.")]
-        [Range(1, 999, ErrorMessage = "Quantity must be greater than 0")]
+        [Range(1, 999, ErrorMessage = "Quantity must be greater than 0.")]
         public int Quantity { get; set; }
 
         [JsonPropertyName("price")]
         [Required(ErrorMessage = "Price is required.")]
         [RegularExpression(@"^\d{1,5}(\.\d{2})$")]
-        [Range(0, 99999.99, ErrorMessage = "Price must be greater than 0")]
+        [Range(0, 99999.99, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
     }
 }

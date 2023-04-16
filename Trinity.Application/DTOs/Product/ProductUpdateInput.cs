@@ -13,15 +13,16 @@ namespace Trinity.Application.DTOs.Product
         [StringLength(200, MinimumLength = 3, ErrorMessage = "Description must be at least 3 characters.")]
         public string Description { get; set; } = string.Empty;
 
-        [JsonPropertyName("image")]
+        [JsonPropertyName("imageUrl")]
         public string ImageUrl { get; set; } = string.Empty;
 
         [JsonPropertyName("quantity")]
-        [Range(1, 999, ErrorMessage = "Quantity must be greater than 0")]
+        [Range(1, 999, ErrorMessage = "Quantity must be greater than 0.")]
         public int Quantity { get; set; }
 
         [JsonPropertyName("price")]
-        [Range(1, 99.999, ErrorMessage = "Price must be greater than 0")]
+        [RegularExpression(@"^\d{1,5}(\.\d{2})$")]
+        [Range(0, 99999.99, ErrorMessage = "Price must be greater than 0.")]
         public decimal Price { get; set; }
 
         [JsonPropertyName("discount")]
